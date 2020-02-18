@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 using Crestron.SimplSharp;
 
+using PepperDash.Core;
 using PepperDash.Essentials.Core;
 
 namespace ExtronXtpEpi
 {
-    public abstract class ExtronXtpEndpoint
+    /*public class ExtronXtpEndpoint : Device, IRoutingOutputs
     {
-
-    }
-
-    public class ExtronXtpInput : ExtronXtpEndpoint, IRoutingOutputs
-    {
-
         #region IRoutingOutputs Members
 
         public RoutingPortCollection<RoutingOutputPort> OutputPorts
@@ -33,5 +28,5 @@ namespace ExtronXtpEpi
         }
 
         #endregion
-    }
+    }*/
 }
