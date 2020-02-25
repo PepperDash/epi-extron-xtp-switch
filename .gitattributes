@@ -61,6 +61,7 @@
 *.vtp.asv filter=lfs diff=lfs merge=lfs -binary
 *.vsd filter=lfs diff=lfs merge=lfs -binary
 *.clpz filter=lfs diff=lfs merge=lfs -binary
+*.cplz filter=lfs diff=lfs merge=lfs -binary
 
 # Documents
 *.doc  diff=astextplain
