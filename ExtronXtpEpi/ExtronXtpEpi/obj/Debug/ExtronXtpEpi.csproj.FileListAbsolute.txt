@@ -3,8 +3,6 @@ C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extro
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Core.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
-C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpNewtonsoft.dll
-C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpReflectionInterface.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Lighting.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Gateways.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpSQLHelperInterface.dll
