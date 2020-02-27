@@ -42,6 +42,7 @@
 *.usp text eol=crlf
 *.ush text eol=crlf
 *.pdtc text eol=crlf
+*.sln text eol=crlf
 
 *.umc binary
 *.lpz binary
@@ -60,7 +61,6 @@
 *.zip filter=lfs diff=lfs merge=lfs -binary
 *.vtp.asv filter=lfs diff=lfs merge=lfs -binary
 *.vsd filter=lfs diff=lfs merge=lfs -binary
-*.clpz filter=lfs diff=lfs merge=lfs -binary
 *.cplz filter=lfs diff=lfs merge=lfs -binary
 
 # Documents

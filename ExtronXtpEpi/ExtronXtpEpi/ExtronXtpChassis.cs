@@ -26,6 +26,7 @@ namespace ExtronXtpEpi
         private readonly ExtronXtpPropsConfig deviceConfig;
         private readonly ExtronCmdProcessor cmdProcessor = new ExtronCmdProcessor();
         private CTimer pollTimer;
+		public bool VirtualMode;
 
         private readonly RoutingPortCollection<RoutingInputPort> inputPorts = new RoutingPortCollection<RoutingInputPort>();
         private readonly RoutingPortCollection<RoutingOutputPort> outputPorts = new RoutingPortCollection<RoutingOutputPort>();
@@ -79,6 +80,7 @@ namespace ExtronXtpEpi
             AddPostActivationAction(() => portGather.LineReceived += HandleLineReceived);
             AddPostActivationAction(() => Connect = true);
             AddPostActivationAction(() => pollTimer = new CTimer(Poll, null, 30000, 30000));
+			VirtualMode = deviceConfig.VirtualMode;
         }
 
         public override bool CustomActivate()
@@ -171,32 +173,66 @@ namespace ExtronXtpEpi
             if (cmd == null) return;
 
             Debug.Console(2, this, "Sending CMD: {0}", cmd);
+
             Communication.SendText(cmd);
+			if (VirtualMode)
+			{
+				VirtualSwitch(cmd);
+			}
+
         }
 
         #endregion
-        
+
+		private void VirtualSwitch(string cmd)
+		{
+			var routeType = cmd.Substring(cmd.Length - 1);
+			
+			var input = cmd.Substring(0, cmd.IndexOf("*", 0));
+			var output = cmd.Substring(cmd.IndexOf("*", 0) + 1 , cmd.IndexOf(routeType) - 2);
+			Debug.Console(2, this, "Virtual Switch Cmd: {0} Type:{1}, Input:{2}, Output: {3}", cmd, routeType, input, output);
+			if (routeType == "%") 
+			{
+				routeType = "Vid";
+			}
+			else if (routeType == "$")
+			{
+				routeType = "Aud";
+			}
+			else 
+			{
+				return; 
+			}
+			var virtualSwitchFB = String.Format("Out{0} In{1} {2}\n", output, input, routeType);
+			Debug.Console(2, this, "VirtualSwitchFB: {0}", virtualSwitchFB);
+			
+			HandleLineReceived(this, new GenericCommMethodReceiveTextArgs(virtualSwitchFB));
+		}
         private void HandleLineReceived(object sender, GenericCommMethodReceiveTextArgs e)
         {
-            var result = (ExtronXtpResponses)Enum.Parse(typeof(ExtronXtpResponses), e.Text, false);
-            switch (result)
-            {
-                case ExtronXtpResponses.Vid:
-                    {
-                        cmdProcessor.EnqueueTask(() => ProcessVideoUpdateResponse(e.Text));
-                        break;
-                    }
-                case ExtronXtpResponses.Aud:
-                    {
-                        cmdProcessor.EnqueueTask(() => ProcessAudioUpdateResponse(e.Text));
-                        break;
-                    }
-                case ExtronXtpResponses.Frq:
-                    {
-                        cmdProcessor.EnqueueTask(() => ProcessSignalSyncUpdateResponse(e.Text));
-                        break;
-                    }
-            }
+
+			Debug.Console(2, this, "HandleLineReceived: {0}", e.Text);
+			if (e.Text.EndsWith("Vid\n"))
+			{
+				Debug.Console(2, this, "Recived Video Switch FB");
+				cmdProcessor.EnqueueTask(() => ProcessVideoUpdateResponse(e.Text));
+				
+			}
+			else if (e.Text.EndsWith("Aud\n"))
+			{
+				cmdProcessor.EnqueueTask(() => ProcessAudioUpdateResponse(e.Text));
+				
+			}
+			else if (e.Text.Contains("Feq0 "))
+			{
+				cmdProcessor.EnqueueTask(() => ProcessSignalSyncUpdateResponse(e.Text));
+				
+			}
+			else
+			{
+				return;
+			}
+   
         }
 
         private void SetupInputs()
@@ -236,6 +272,7 @@ namespace ExtronXtpEpi
             foreach (var output in deviceConfig.Outputs)
             {
                 var videoName = new StringBuilder(Key);
+				var localOutputNumber = output.IoNumber;
                 videoName.Append("-");
                 videoName.Append(output.VideoName);
                 videoName.Replace(" ", "");
@@ -255,19 +292,19 @@ namespace ExtronXtpEpi
                 VideoOutputFeedbacks.Add(output.IoNumber, new IntFeedback(() =>
                     {
                         int result;
-                        return videoRoutes.TryGetValue(output.IoNumber, out result) ? result : 0;
+						return videoRoutes.TryGetValue(localOutputNumber, out result) ? result : 0;
                     }));
 
                 AudioOutputFeedbacks.Add(output.IoNumber, new IntFeedback(() =>
                     {
                         int result;
-                        return audioRoutes.TryGetValue(output.IoNumber, out result) ? result : 0;
+						return audioRoutes.TryGetValue(localOutputNumber, out result) ? result : 0;
                     }));
 
                 OutputVideoRouteNameFeedbacks.Add(output.IoNumber, new StringFeedback(() =>
                     {
                         int result;
-                        if (!videoRoutes.TryGetValue(output.IoNumber, out result)) return string.Empty;
+						if (!videoRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
 
                         var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
                         return source.VideoName ?? "No Source";
@@ -276,14 +313,14 @@ namespace ExtronXtpEpi
                 OutputAudioRouteNameFeedbacks.Add(output.IoNumber, new StringFeedback(() =>
                 {
                     int result;
-                    if (!audioRoutes.TryGetValue(output.IoNumber, out result)) return string.Empty;
+					if (!audioRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
 
                     var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
                     return source.AudioName ?? "No Source";
                 }));
 
                 var nameFb = new StringFeedback(() => output.Name ?? string.Empty);
-                OutputNameFeedbacks.Add(output.IoNumber, nameFb);
+				OutputNameFeedbacks.Add(localOutputNumber, nameFb);
                 nameFb.FireUpdate();
             }
         }
@@ -333,7 +370,7 @@ namespace ExtronXtpEpi
         private void UpdateVideoRoute(int output, int value)
         {
             videoRoutes[output] = value;
-
+			Debug.Console(2, this, "UpdateVideoRoute Input:{0} Output:{1}\r", value, output);
             IntFeedback feedback;
             if (VideoOutputFeedbacks.TryGetValue(output, out feedback))
             {
@@ -366,22 +403,29 @@ namespace ExtronXtpEpi
 
         private void ProcessVideoUpdateResponse(string response)
         {
-            var responses = response.Split(' ');
-
-            var input = Convert.ToInt32(responses.SingleOrDefault(x => x.Contains("In")));
-            var output = Convert.ToInt32(responses.SingleOrDefault(x => x.Contains("Out")));
-
-            if (output == 0) return;
-            UpdateVideoRoute(output, input);
+			try
+			{
+				var responses = response.Split(' ');
+				
+				var input = Convert.ToInt32(responses[1].Replace("In", ""));
+				var output = Convert.ToInt32(responses[0].Replace("Out", ""));
+				Debug.Console(0, this, "ProcessVideoUpdateResponse Input:{0} Output: {1}\r", input, output);
+				if (output == 0) return;
+				UpdateVideoRoute(output, input);
+			}
+			catch (Exception ex)
+			{
+				Debug.ConsoleWithLog(0, this, "ProcessVideoUpdateResponse Exception:{0}\r", ex.Message);
+			}
         }
 
         private void ProcessAudioUpdateResponse(string response)
         {
             var responses = response.Split(' ');
 
-            var input = Convert.ToInt32(responses.SingleOrDefault(x => x.Contains("In")));
-            var output = Convert.ToInt32(responses.SingleOrDefault(x => x.Contains("Out")));
-
+			var input = Convert.ToInt32(responses[1].Replace("In", ""));
+			var output = Convert.ToInt32(responses[0].Replace("Out", ""));
+			Debug.Console(0, this, "ProcessAudioUpdateResponse Input:{0} Output: {1}\r", input, output);
             if (output == 0) return;
             UpdateAudioRoute(output, input);
         }
