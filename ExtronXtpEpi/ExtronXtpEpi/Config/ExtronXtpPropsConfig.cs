@@ -32,5 +32,8 @@ namespace ExtronXtpEpi.Config
 
         [JsonProperty("password")]
         public string Password { get; set; }
+
+		[JsonProperty("virtualMode")]
+		public bool VirtualMode { get; set; } 
     }
 }
