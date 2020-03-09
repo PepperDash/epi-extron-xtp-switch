@@ -289,35 +289,43 @@ namespace ExtronXtpEpi
                 videoRoutes.Add(output.IoNumber, 0);
                 audioRoutes.Add(output.IoNumber, 0);
 
-                VideoOutputFeedbacks.Add(output.IoNumber, new IntFeedback(() =>
+				VideoOutputFeedbacks.Add(localOutputNumber, new IntFeedback(() =>
                     {
                         int result;
 						return videoRoutes.TryGetValue(localOutputNumber, out result) ? result : 0;
                     }));
 
-                AudioOutputFeedbacks.Add(output.IoNumber, new IntFeedback(() =>
+				AudioOutputFeedbacks.Add(localOutputNumber, new IntFeedback(() =>
                     {
                         int result;
 						return audioRoutes.TryGetValue(localOutputNumber, out result) ? result : 0;
                     }));
 
-                OutputVideoRouteNameFeedbacks.Add(output.IoNumber, new StringFeedback(() =>
+				OutputVideoRouteNameFeedbacks.Add(localOutputNumber, new StringFeedback(() =>
                     {
+	
                         int result;
-						if (!videoRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
+						if (!videoRoutes.TryGetValue(localOutputNumber, out result))
+						{
+							return "Unknown";
+						}
 
                         var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
                         return source.VideoName ?? "No Source";
+						
+					
                     }));
 
-                OutputAudioRouteNameFeedbacks.Add(output.IoNumber, new StringFeedback(() =>
-                {
-                    int result;
-					if (!audioRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
+				OutputAudioRouteNameFeedbacks.Add(localOutputNumber, new StringFeedback(() =>
+					{
 
-                    var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
-                    return source.AudioName ?? "No Source";
-                }));
+						int result;
+						if (!audioRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
+
+						var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
+						return source.AudioName ?? "No Source";
+					
+					}));
 
                 var nameFb = new StringFeedback(() => output.Name ?? string.Empty);
 				OutputNameFeedbacks.Add(localOutputNumber, nameFb);
@@ -369,19 +377,27 @@ namespace ExtronXtpEpi
 
         private void UpdateVideoRoute(int output, int value)
         {
-            videoRoutes[output] = value;
-			Debug.Console(2, this, "UpdateVideoRoute Input:{0} Output:{1}\r", value, output);
-            IntFeedback feedback;
-            if (VideoOutputFeedbacks.TryGetValue(output, out feedback))
-            {
-                if (feedback != null) feedback.FireUpdate();
-            }
+			try
+			{
+				videoRoutes[output] = value;
+				Debug.Console(2, this, "UpdateVideoRoute Input:{0} Output:{1}\r", value, output);
+				IntFeedback feedback;
+				if (VideoOutputFeedbacks.TryGetValue(output, out feedback))
+				{
+					feedback.FireUpdate();
+				}
 
-            StringFeedback nameFeedback;
-            if (!OutputVideoRouteNameFeedbacks.TryGetValue(output, out nameFeedback))
-            {
-                if (nameFeedback != null) nameFeedback.FireUpdate();
-            }
+				StringFeedback nameFeedback;
+				if (OutputVideoRouteNameFeedbacks.TryGetValue(output, out nameFeedback))
+				{
+					nameFeedback.FireUpdate();
+				}
+			
+			}
+		catch (Exception ex)
+		{
+			Debug.ConsoleWithLog(0, this, "OutputAudioRouteNameFeedbacks Exception:{0}\r", ex.Message);
+		}
         }
 
         private void UpdateAudioRoute(int output, int value)
@@ -395,7 +411,7 @@ namespace ExtronXtpEpi
             }
 
             StringFeedback nameFeedback;
-            if (!OutputAudioRouteNameFeedbacks.TryGetValue(output, out nameFeedback))
+            if (OutputAudioRouteNameFeedbacks.TryGetValue(output, out nameFeedback))
             {
                 if (nameFeedback != null) nameFeedback.FireUpdate();
             }

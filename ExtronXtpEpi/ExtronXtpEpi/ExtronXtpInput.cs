@@ -13,14 +13,24 @@ namespace ExtronXtpEpi
 {
     public class ExtronXtpIo
     {
+		private string _VideoName; 
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("videoName")]
-        public string VideoName { get; set; }
+		[JsonProperty("videoName")]
+		public string VideoName
+		{
+			get { return _VideoName ?? Name + "-Video"; }
+			set { _VideoName = value; }
+		}
 
         [JsonProperty("audioName")]
-        public string AudioName { get; set; }
+		public string AudioName
+		{
+			get { return _VideoName ?? Name + "-Audio"; }
+			set { _VideoName = value; }
+		}
 
         [JsonProperty("ioNumber")]
         public int IoNumber { get; set; }
