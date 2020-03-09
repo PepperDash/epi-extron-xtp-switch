@@ -320,7 +320,11 @@ namespace ExtronXtpEpi
 					{
 
 						int result;
-						if (!audioRoutes.TryGetValue(localOutputNumber, out result)) return string.Empty;
+
+						if (!audioRoutes.TryGetValue(localOutputNumber, out result) || localOutputNumber == 0)
+						{
+							return "Unknown";
+						} 
 
 						var source = Inputs.FirstOrDefault(x => x.IoNumber == result);
 						return source.AudioName ?? "No Source";
@@ -396,7 +400,7 @@ namespace ExtronXtpEpi
 			}
 		catch (Exception ex)
 		{
-			Debug.ConsoleWithLog(0, this, "OutputAudioRouteNameFeedbacks Exception:{0}\r", ex.Message);
+			Debug.ConsoleWithLog(0, this, "UpdateVideoRoute Exception:{0}\r", ex.Message);
 		}
         }
 
@@ -437,13 +441,20 @@ namespace ExtronXtpEpi
 
         private void ProcessAudioUpdateResponse(string response)
         {
-            var responses = response.Split(' ');
+			try
+			{
+				var responses = response.Split(' ');
 
-			var input = Convert.ToInt32(responses[1].Replace("In", ""));
-			var output = Convert.ToInt32(responses[0].Replace("Out", ""));
-			Debug.Console(0, this, "ProcessAudioUpdateResponse Input:{0} Output: {1}\r", input, output);
-            if (output == 0) return;
-            UpdateAudioRoute(output, input);
+				var input = Convert.ToInt32(responses[1].Replace("In", ""));
+				var output = Convert.ToInt32(responses[0].Replace("Out", ""));
+				Debug.Console(0, this, "ProcessAudioUpdateResponse Input:{0} Output: {1}\r", input, output);
+				if (output == 0) return;
+				UpdateAudioRoute(output, input);
+			}
+			catch (Exception ex)
+			{
+				Debug.ConsoleWithLog(0, this, "ProcessVideoUpdateResponse Exception:{0}\r", ex.Message);
+			}
         }
 
         private void ProcessSignalSyncUpdateResponse(string response)
