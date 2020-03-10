@@ -186,10 +186,11 @@ namespace ExtronXtpEpi
 
 		private void VirtualSwitch(string cmd)
 		{
+
 			var routeType = cmd.Substring(cmd.Length - 1);
 			
 			var input = cmd.Substring(0, cmd.IndexOf("*", 0));
-			var output = cmd.Substring(cmd.IndexOf("*", 0) + 1 , cmd.IndexOf(routeType) - 2);
+			var output = cmd.Substring(cmd.IndexOf("*", 0) + 1, cmd.Length - (cmd.IndexOf("*", 0) + 1) - 1);
 			Debug.Console(2, this, "Virtual Switch Cmd: {0} Type:{1}, Input:{2}, Output: {3}", cmd, routeType, input, output);
 			if (routeType == "%") 
 			{
