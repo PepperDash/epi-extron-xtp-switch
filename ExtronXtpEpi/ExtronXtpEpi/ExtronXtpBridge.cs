@@ -81,7 +81,7 @@ namespace ExtronXtpEpi
 					var joinActual = input.Key + joinMap.OutputCurrentVideoInputNames;
 
 					var feedback = input.Value;
-					Debug.ConsoleWithLog(0, "OutputVideoRouteNameFeedbacks Link:{0}\r", joinActual);
+					// Debug.ConsoleWithLog(2, "OutputVideoRouteNameFeedbacks Link:{0}\r", joinActual);
 					if (feedback == null) continue;
 					
 					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);

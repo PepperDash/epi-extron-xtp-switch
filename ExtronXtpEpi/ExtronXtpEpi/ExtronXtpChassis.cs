@@ -63,6 +63,8 @@ namespace ExtronXtpEpi
                 {
                     Debug.Console(2, this, args.Client.ClientStatus.ToString());
                     if (ConnectFb != null) ConnectFb.FireUpdate();
+					
+				
                 }; 
             }
 
@@ -76,12 +78,16 @@ namespace ExtronXtpEpi
 
             ConnectFb = new BoolFeedback(() => Connect);
             portGather = new CommunicationGather(Communication, '\n');  
+			
+
 
             AddPostActivationAction(() => portGather.LineReceived += HandleLineReceived);
             AddPostActivationAction(() => Connect = true);
-            AddPostActivationAction(() => pollTimer = new CTimer(Poll, null, 30000, 30000));
+            //AddPostActivationAction(() => pollTimer = new CTimer(Poll, null, 30000, 30000));
 			VirtualMode = deviceConfig.VirtualMode;
         }
+
+
 
         public override bool CustomActivate()
         {
@@ -174,7 +180,7 @@ namespace ExtronXtpEpi
 
             Debug.Console(2, this, "Sending CMD: {0}", cmd);
 
-            Communication.SendText(cmd);
+            SendCommand(cmd);
 			if (VirtualMode)
 			{
 				VirtualSwitch(cmd);
@@ -228,6 +234,10 @@ namespace ExtronXtpEpi
 			{
 				cmdProcessor.EnqueueTask(() => ProcessSignalSyncUpdateResponse(e.Text));
 				
+			}
+			else if (e.Text.Contains("Extron Electronics"))
+			{
+				SendInitialCommands();
 			}
 			else
 			{
@@ -340,27 +350,33 @@ namespace ExtronXtpEpi
 
         private void SendInitialCommands()
         {
-            Communication.SendText(SetVerboseMode(1));
-            Poll(null);
-            Communication.SendText("0LS");
+			SendCommand(deviceConfig.Password);
+            SendCommand(SetVerboseMode(1));
+            GetCurrentRouteState(null);
+            SendCommand("0LS");
         }
 
-        private void Poll(object o)
+        private void GetCurrentRouteState(object o)
         {
             foreach (var output in outputs)
             {
                 var videoCmdToSend = new StringBuilder();
                 videoCmdToSend.Append(output.IoNumber);
                 videoCmdToSend.Append(videoCmd);
-                Communication.SendText(videoCmdToSend.ToString());
+                SendCommand(videoCmdToSend.ToString());
 
                 var audioCmdToSend = new StringBuilder();
                 audioCmdToSend.Append(output.IoNumber);
                 audioCmdToSend.Append(audioCmd);
-                Communication.SendText(audioCmdToSend.ToString());
+                SendCommand(audioCmdToSend.ToString());
             }
         }
 
+		private void SendCommand(string cmd)
+		{
+			Debug.Console(2, this, "Tx: {0}", cmd);
+			Communication.SendText(cmd + "\x0D\x0A");
+		}
         private void ShowAllRoutingPorts()
         {
             foreach (var item in InputPorts)
