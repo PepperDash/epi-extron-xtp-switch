@@ -216,17 +216,17 @@ namespace ExtronXtpEpi
 			HandleLineReceived(this, new GenericCommMethodReceiveTextArgs(virtualSwitchFB));
 		}
         private void HandleLineReceived(object sender, GenericCommMethodReceiveTextArgs e)
-        {
-
+		{
 			Debug.Console(2, this, "HandleLineReceived: {0}", e.Text);
-			if (e.Text.EndsWith("Vid\n"))
+			if (e.Text.Contains("Vid"))
 			{
 				Debug.Console(2, this, "Recived Video Switch FB");
 				cmdProcessor.EnqueueTask(() => ProcessVideoUpdateResponse(e.Text));
 				
 			}
-			else if (e.Text.EndsWith("Aud\n"))
+			else if (e.Text.Contains("Aud"))
 			{
+				Debug.Console(2, this, "Recived Audio Switch FB");
 				cmdProcessor.EnqueueTask(() => ProcessAudioUpdateResponse(e.Text));
 				
 			}
@@ -350,10 +350,12 @@ namespace ExtronXtpEpi
 
         private void SendInitialCommands()
         {
+
 			SendCommand(deviceConfig.Password);
-            SendCommand(SetVerboseMode(1));
+			SendCommand(SetVerboseMode(3));
             GetCurrentRouteState(null);
             SendCommand("0LS");
+			SendCommand(SetVerboseMode(1));
         }
 
         private void GetCurrentRouteState(object o)
