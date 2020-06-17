@@ -16,3 +16,7 @@ C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extro
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.pdb
+C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Core.dll
+C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
+C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
+C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Remotes.dll

@@ -42,6 +42,10 @@ namespace ExtronXtpEpi
         public Dictionary<int, BoolFeedback> VideoInputSyncFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> InputNameFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> OutputNameFeedbacks { get; private set; }
+		public Dictionary<int, StringFeedback> InputAudioNameFeedbacks { get; private set; }
+		public Dictionary<int, StringFeedback> InputVideoNameFeedbacks { get; private set; }
+		public Dictionary<int, StringFeedback> OutputAudioNameFeedbacks { get; private set; }
+		public Dictionary<int, StringFeedback> OutputVideoNameFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> OutputVideoRouteNameFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> OutputAudioRouteNameFeedbacks { get; private set; }
 
@@ -72,6 +76,11 @@ namespace ExtronXtpEpi
             AudioOutputFeedbacks = new Dictionary<int, IntFeedback>();
             VideoInputSyncFeedbacks = new Dictionary<int, BoolFeedback>();
             InputNameFeedbacks = new Dictionary<int, StringFeedback>();
+			InputAudioNameFeedbacks = new Dictionary<int, StringFeedback>();
+			InputVideoNameFeedbacks = new Dictionary<int, StringFeedback>();
+			OutputAudioNameFeedbacks = new Dictionary<int, StringFeedback>();
+			OutputVideoNameFeedbacks = new Dictionary<int, StringFeedback>();
+
             OutputNameFeedbacks = new Dictionary<int, StringFeedback>();
             OutputVideoRouteNameFeedbacks = new Dictionary<int, StringFeedback>();
             OutputAudioRouteNameFeedbacks = new Dictionary<int, StringFeedback>();
@@ -272,9 +281,16 @@ namespace ExtronXtpEpi
                     }));
 
                 var nameFb = new StringFeedback(() => input.Name ?? string.Empty);
+				var videoNameFb = new StringFeedback(() => input.VideoName ?? string.Empty);
+				var audioNameFb = new StringFeedback(() => input.AudioName ?? string.Empty);
 
                 InputNameFeedbacks.Add(input.IoNumber, nameFb);
-                nameFb.FireUpdate();
+				InputVideoNameFeedbacks.Add(input.IoNumber, videoNameFb);
+				InputAudioNameFeedbacks.Add(input.IoNumber, audioNameFb);
+
+				nameFb.FireUpdate();
+				videoNameFb.FireUpdate();
+				audioNameFb.FireUpdate();
             }
         }
 
@@ -343,8 +359,16 @@ namespace ExtronXtpEpi
 					}));
 
                 var nameFb = new StringFeedback(() => output.Name ?? string.Empty);
+				var VideoNameFb = new StringFeedback(() => output.VideoName ?? string.Empty);
+				var AudioNameFb = new StringFeedback(() => output.AudioName ?? string.Empty);
+
 				OutputNameFeedbacks.Add(localOutputNumber, nameFb);
+				OutputVideoNameFeedbacks.Add(localOutputNumber, VideoNameFb);
+				OutputAudioNameFeedbacks.Add(localOutputNumber, AudioNameFb);
+
                 nameFb.FireUpdate();
+				VideoNameFb.FireUpdate();
+				AudioNameFb.FireUpdate();
             }
         }
 

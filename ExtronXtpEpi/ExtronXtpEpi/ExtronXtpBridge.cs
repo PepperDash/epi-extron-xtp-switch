@@ -16,7 +16,7 @@ namespace ExtronXtpEpi
         {
 			try
 			{
-				var joinMap = new DmChassisControllerJoinMap();
+				var joinMap = new ExtronControllerJoinMap();
 				joinMap.OffsetJoinNumbers(joinStart);
 
 				chassis.ConnectFb.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline]);
@@ -65,6 +65,45 @@ namespace ExtronXtpEpi
 
 					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
 				}
+
+				foreach (var inputVideoName in chassis.InputVideoNameFeedbacks)
+				{
+					var joinActual = inputVideoName.Key + joinMap.InputVideoNames;
+
+					var feedback = inputVideoName.Value;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
+				}
+				foreach (var inputAudioName in chassis.InputAudioNameFeedbacks)
+				{
+					var joinActual = inputAudioName.Key + joinMap.InputAudioNames;
+
+					var feedback = inputAudioName.Value;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
+				}
+
+				foreach (var outputVideoName in chassis.OutputVideoNameFeedbacks)
+				{
+					var joinActual = outputVideoName.Key + joinMap.OutputVideoNames;
+
+					var feedback = outputVideoName.Value;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
+				}
+				foreach (var outputAudioName in chassis.OutputAudioNameFeedbacks)
+				{
+					var joinActual = outputAudioName.Key + joinMap.OutputAudioNames;
+
+					var feedback = outputAudioName.Value;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
+				}
+
 
 				foreach (var output in chassis.OutputNameFeedbacks)
 				{
