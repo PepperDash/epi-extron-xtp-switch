@@ -116,7 +116,7 @@ namespace PepperDash.Essentials.Bridges
 			SystemId = 10; // Analog sets/gets SystemId, digital input applies and provides feedback of ID change busy
 
 			//Digital 
-			IsOnline = 11;
+			IsOnline = 1;
 			VideoSyncStatus = 100; //101-299
 			InputEndpointOnline = 500; //501-699
 			OutputEndpointOnline = 700; //701-899
