@@ -407,18 +407,16 @@ namespace ExtronXtpEpi
         {
             foreach (var item in InputPorts)
             {
-                Debug.Console(0, this, "Key:{0}", item.Key);
-                //Debug.Console(0, this, "{0}", item.Port);
-                Debug.Console(0, this, "Type:{0}", item.Type);
-                Debug.Console(0, this, "Parent:{0}\r", item.ParentDevice.Key);
+                Debug.Console(2, this, "Key:{0}", item.Key);
+                Debug.Console(2, this, "Type:{0}", item.Type);
+                Debug.Console(2, this, "Parent:{0}\r", item.ParentDevice.Key);
             }
 
             foreach (var item in OutputPorts)
             {
-                Debug.Console(0, this, "Key:{0}", item.Key);
-                //Debug.Console(0, this, "{0}", item.Port);
-                Debug.Console(0, this, "Type:{0}", item.Type);
-                Debug.Console(0, this, "Parent:{0}\r", item.ParentDevice.Key);
+                Debug.Console(2, this, "Key:{0}", item.Key);
+                Debug.Console(2, this, "Type:{0}", item.Type);
+                Debug.Console(2, this, "Parent:{0}\r", item.ParentDevice.Key);
             }
         }
 
@@ -472,7 +470,7 @@ namespace ExtronXtpEpi
 				
 				var input = Convert.ToInt32(responses[1].Replace("In", ""));
 				var output = Convert.ToInt32(responses[0].Replace("Out", ""));
-				Debug.Console(0, this, "ProcessVideoUpdateResponse Input:{0} Output: {1}\r", input, output);
+				Debug.Console(2, this, "ProcessVideoUpdateResponse Input:{0} Output: {1}\r", input, output);
 				if (output == 0) return;
 				UpdateVideoRoute(output, input);
 			}
@@ -490,7 +488,7 @@ namespace ExtronXtpEpi
 
 				var input = Convert.ToInt32(responses[1].Replace("In", ""));
 				var output = Convert.ToInt32(responses[0].Replace("Out", ""));
-				Debug.Console(0, this, "ProcessAudioUpdateResponse Input:{0} Output: {1}\r", input, output);
+				Debug.Console(2, this, "ProcessAudioUpdateResponse Input:{0} Output: {1}\r", input, output);
 				if (output == 0) return;
 				UpdateAudioRoute(output, input);
 			}
