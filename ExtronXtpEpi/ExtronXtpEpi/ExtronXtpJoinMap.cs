@@ -72,6 +72,7 @@ namespace PepperDash.Essentials.Bridges
 		#endregion
 
 		#region Serials
+		public uint ChassisName { get; set; }
 		/// <summary>
 		/// Range sets and reports the name for the corresponding input card
 		/// </summary>
@@ -133,6 +134,7 @@ namespace PepperDash.Essentials.Bridges
 
 
 			//Serial
+			ChassisName = 1;
 			InputNames = 100; //101-299
 			OutputNames = 300; //301-499
 			InputVideoNames = 500; //501-699
@@ -159,6 +161,7 @@ namespace PepperDash.Essentials.Bridges
 			OutputUsb = OutputUsb + joinOffset;
 			InputUsb = InputUsb + joinOffset;
 			VideoSyncStatus = VideoSyncStatus + joinOffset;
+			ChassisName = ChassisName + joinOffset;
 			InputNames = InputNames + joinOffset;
 			OutputNames = OutputNames + joinOffset;
 			OutputCurrentVideoInputNames = OutputCurrentVideoInputNames + joinOffset;

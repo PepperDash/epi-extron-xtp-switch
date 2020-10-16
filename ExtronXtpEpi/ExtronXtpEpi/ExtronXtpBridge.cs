@@ -22,6 +22,7 @@ namespace ExtronXtpEpi
 				chassis.ConnectFb.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline]);
 				chassis.OkFb.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline + 1]);
 
+
 				foreach (var input in chassis.VideoInputSyncFeedbacks)
 				{
 					var joinActual = input.Key + joinMap.VideoSyncStatus;
@@ -135,6 +136,7 @@ namespace ExtronXtpEpi
 
 					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
 				}
+				trilist.StringInput[joinMap.ChassisName].StringValue = chassis.Name;
 			}
 			catch (Exception ex)
 			{

@@ -20,3 +20,25 @@ C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extro
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
 C:\Users\JTA\Documents\Stash Folder\FMAC\SLN001-MPR\_EssentialsPlugins\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Remotes.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\ExtronXtpEpi.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\ExtronXtpEpi.pdb
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Essentials Devices Common.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Core.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_DM.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Lighting.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpSQLHelperInterface.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Fusion.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Shades.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Remotes.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.EthernetCommunications.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.DeviceSupport.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.UI.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpTimerEventInterface.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Gateways.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.GeneralIO.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.DM.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\epi-extron-xtp-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.pdb
