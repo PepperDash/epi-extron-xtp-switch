@@ -49,7 +49,7 @@ namespace ExtronXtpEpi
 
         public void Dispose()
         {
-            tasks.Enqueue(null);
+            EnqueueTask(null);
             worker.Join();
             wh.Close();
         }
