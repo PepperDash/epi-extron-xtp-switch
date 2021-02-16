@@ -46,11 +46,6 @@ C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\Extro
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\ExtronXtpEpi.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\ExtronXtpEpi.pdb
-C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Essentials Devices Common.dll
-C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Core.dll
-C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
-C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_DM.dll
-C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpNewtonsoft.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\SimplSharpReflectionInterface.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.Lighting.dll
@@ -66,3 +61,9 @@ C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\Extro
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.GeneralIO.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.DM.dll
 C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\obj\Debug\ExtronXtpEpi.pdb
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Essentials Devices Common.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Core.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_Core.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDash_Essentials_DM.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\PepperDashEssentials.dll
+C:\Users\JTA\Documents\Stash Folder\Plugins\epi-extron-switch\ExtronXtpEpi\ExtronXtpEpi\bin\Debug\Crestron.SimplSharpPro.ThreeSeriesCards.dll
