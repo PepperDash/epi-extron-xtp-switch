@@ -96,12 +96,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ExtronXtpPropsConfig.cs" />
+    <Compile Include="BoolWithFeedback.cs" />
     <Compile Include="ExtronCmdProcessor.cs" />
     <Compile Include="ExtronXtpBridge.cs" />
     <Compile Include="ExtronXtpChassis.cs" />
     <Compile Include="ExtronXtpEndpoint.cs" />
     <Compile Include="ExtronXtpInput.cs" />
     <Compile Include="ExtronXtpJoinMap.cs" />
+    <Compile Include="IntWithFeedback.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>

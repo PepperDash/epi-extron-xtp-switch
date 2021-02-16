@@ -42,6 +42,19 @@ namespace PepperDash.Essentials.Bridges
 		/// Range reports high if corresponding output is disabled by HDCP.
 		/// </summary>
 		public uint OutputDisabledByHdcp { get; set; } // indicates that there is an attached transmitter that should be bridged to be interacted with
+		/// <summary>
+		/// Increments the output volume.
+		/// </summary>
+		public uint OutputVolumeUp { get; set; }
+		/// <summary>
+		/// Decrements the output volume.
+		/// </summary>
+		public uint OutputVolumeDown { get; set; }
+		/// <summary>
+		/// Toggles the outputmute.
+		/// </summary>
+		public uint OutputMuteToggle { get; set; }
+
 		#endregion
 
 		#region Analogs
@@ -69,6 +82,10 @@ namespace PepperDash.Essentials.Bridges
 		/// Range reports the highest supported HDCP state level for the corresponding input card
 		/// </summary>
 		public uint HdcpSupportCapability { get; set; }
+		/// <summary>
+		/// Sets/Gets the output volume.
+		/// </summary>
+		public uint OutputVolume { get; set; }
 		#endregion
 
 		#region Serials
@@ -123,6 +140,9 @@ namespace PepperDash.Essentials.Bridges
 			OutputEndpointOnline = 700; //701-899
 			TxAdvancedIsPresent = 1000; //1001-1199
 			OutputDisabledByHdcp = 1200; //1201-1399
+			OutputVolumeUp = 1400;
+			OutputVolumeDown = 1600;
+			OutputMuteToggle = 1800; 
 
 			//Analog
 			OutputVideo = 100; //101-299
@@ -131,6 +151,7 @@ namespace PepperDash.Essentials.Bridges
 			InputUsb = 700; //701-899
 			HdcpSupportState = 1000; //1001-1199
 			HdcpSupportCapability = 1200; //1201-1399
+			OutputVolume = 1400; 
 
 
 			//Serial
@@ -173,6 +194,10 @@ namespace PepperDash.Essentials.Bridges
 			HdcpSupportCapability = HdcpSupportCapability + joinOffset;
 			OutputDisabledByHdcp = OutputDisabledByHdcp + joinOffset;
 			TxAdvancedIsPresent = TxAdvancedIsPresent + joinOffset;
+			OutputVolumeUp = OutputVolumeUp + joinOffset;
+			OutputVolumeDown = OutputVolumeDown + joinOffset;
+			OutputVolume  = OutputVolume + joinOffset;
+			OutputMuteToggle = OutputMuteToggle + joinOffset;
 		}
 	}
 }

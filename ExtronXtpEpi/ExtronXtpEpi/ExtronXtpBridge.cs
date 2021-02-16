@@ -136,6 +136,34 @@ namespace ExtronXtpEpi
 
 					feedback.LinkInputSig(trilist.StringInput[(uint)joinActual]);
 				}
+				foreach (var output in chassis.OutputAudioLevelFeedbacks)
+				{
+
+					var outputLocal = output.Key;
+					var volJoin = output.Key + joinMap.OutputVolume;
+					var volUpJoin = output.Key + joinMap.OutputVolumeUp;
+					var volDownJoin = output.Key + joinMap.OutputVolumeDown;
+
+					var feedback = output.Value.Feedback;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.UShortInput[(uint)volJoin]);
+					trilist.SetBoolSigAction((uint)volUpJoin, (b) => chassis.OutputVolumeIncrement(outputLocal));
+					trilist.SetBoolSigAction((uint)volDownJoin, (b) => chassis.OutputVolumeDecrement(outputLocal));
+					trilist.SetUShortSigAction((uint)volJoin, (a) => chassis.OutputVolumeSet(outputLocal, a));
+				}
+				foreach (var output in chassis.OutputAudioMuteFeedbacks)
+				{
+
+					var outputLocal = output.Key;
+					var join = output.Key + joinMap.OutputMuteToggle;
+
+					var feedback = output.Value.Feedback;
+					if (feedback == null) continue;
+
+					feedback.LinkInputSig(trilist.BooleanInput[(uint)join]);
+					trilist.SetSigTrueAction((uint)join, () => chassis.OutputMuteToggle(outputLocal));
+				}
 				trilist.StringInput[joinMap.ChassisName].StringValue = chassis.Name;
 			}
 			catch (Exception ex)

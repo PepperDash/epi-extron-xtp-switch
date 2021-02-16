@@ -48,6 +48,8 @@ namespace ExtronXtpEpi
 		public Dictionary<int, StringFeedback> OutputVideoNameFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> OutputVideoRouteNameFeedbacks { get; private set; }
         public Dictionary<int, StringFeedback> OutputAudioRouteNameFeedbacks { get; private set; }
+		public Dictionary<int, IntWithFeedback> OutputAudioLevelFeedbacks { get; private set; }
+		public Dictionary<int, BoolWithFeedback> OutputAudioMuteFeedbacks { get; private set; }
 
         public IEnumerable<ExtronXtpIo> Inputs { get { return inputs; } }
         public IEnumerable<ExtronXtpIo> Outputs { get { return outputs; } }
@@ -80,6 +82,8 @@ namespace ExtronXtpEpi
 			InputVideoNameFeedbacks = new Dictionary<int, StringFeedback>();
 			OutputAudioNameFeedbacks = new Dictionary<int, StringFeedback>();
 			OutputVideoNameFeedbacks = new Dictionary<int, StringFeedback>();
+			OutputAudioLevelFeedbacks = new Dictionary<int, IntWithFeedback>();
+			OutputAudioMuteFeedbacks = new Dictionary<int, BoolWithFeedback>();
 
             OutputNameFeedbacks = new Dictionary<int, StringFeedback>();
             OutputVideoRouteNameFeedbacks = new Dictionary<int, StringFeedback>();
@@ -244,6 +248,16 @@ namespace ExtronXtpEpi
 				cmdProcessor.EnqueueTask(() => ProcessSignalSyncUpdateResponse(e.Text));
 				
 			}
+			else if (e.Text.Contains("Vol"))
+			{
+				cmdProcessor.EnqueueTask(() => ProcessOutputVolumeUpdateResponse(e.Text));
+
+			}
+			else if (e.Text.Contains("Amt"))
+			{
+				cmdProcessor.EnqueueTask(() => ProcessOutputVolumeMuteUpdateResponse(e.Text));
+
+			}
 			else if (e.Text.Contains("Extron Electronics"))
 			{
 				SendInitialCommands();
@@ -357,7 +371,9 @@ namespace ExtronXtpEpi
 						return source.AudioName ?? "No Source";
 					
 					}));
-
+				
+				OutputAudioLevelFeedbacks.Add(localOutputNumber, new IntWithFeedback());
+				OutputAudioMuteFeedbacks.Add(localOutputNumber, new BoolWithFeedback());
                 var nameFb = new StringFeedback(() => output.Name ?? string.Empty);
 				var VideoNameFb = new StringFeedback(() => output.VideoName ?? string.Empty);
 				var AudioNameFb = new StringFeedback(() => output.AudioName ?? string.Empty);
@@ -395,12 +411,15 @@ namespace ExtronXtpEpi
                 audioCmdToSend.Append(output.IoNumber);
                 audioCmdToSend.Append(audioCmd);
                 SendCommand(audioCmdToSend.ToString());
+
+				SendCommand(string.Format("{0}V", output.IoNumber));
+				SendCommand(string.Format("{0}Z", output.IoNumber));
             }
         }
 
 		private void SendCommand(string cmd)
 		{
-			Debug.Console(2, this, "Tx: {0}", cmd);
+			Debug.Console(2, this, "Tx: {0}", cmd);		
 			Communication.SendText(cmd + "\x0D\x0A");
 		}
         private void ShowAllRoutingPorts()
@@ -518,6 +537,72 @@ namespace ExtronXtpEpi
                 if (feedback != null) feedback.FireUpdate();
             }
         }
+		private void ProcessOutputVolumeUpdateResponse(string response)
+		{
+			try
+			{
+				var responses = response.Split(' ');
+
+				var volume = Convert.ToInt32(responses[1].Replace("Vol", ""));
+				var output = Convert.ToInt32(responses[0].Replace("Out", ""));
+				Debug.Console(2, this, "ProcessOutputVolumeUpdateResponse Output:{0} Volume: {1}\r", output, volume);
+				if (output == 0) return;
+				IntWithFeedback feedback;
+				if (!OutputAudioLevelFeedbacks.TryGetValue(output, out feedback)) return;
+				if (feedback != null) feedback.Value = volume * 1024 - 1;
+			}
+			catch (Exception ex)
+			{
+				Debug.ConsoleWithLog(0, this, "ProcessOutputVolumeUpdateResponse Exception:{0}\r", ex.Message);
+			}
+		}
+		private void ProcessOutputVolumeMuteUpdateResponse(string response)
+		{
+			try
+			{
+				var responses = response.Split('*');
+
+				var state = Convert.ToInt32(responses[1]);
+				var output = Convert.ToInt32(responses[0].Replace("Amt", ""));
+				Debug.Console(2, this, "ProcessOutputVolumeUpdateResponse Output:{0} Volume: {1}\r", output, state);
+				if (output == 0) return;
+				BoolWithFeedback feedback;
+				if (!OutputAudioMuteFeedbacks.TryGetValue(output, out feedback)) return;
+				if (feedback != null) feedback.Value = state > 0 ? true:false;
+			}
+			catch (Exception ex)
+			{
+				Debug.ConsoleWithLog(0, this, "ProcessOutputVolumeUpdateResponse Exception:{0}\r", ex.Message);
+			}
+		}
+
+		public void OutputVolumeIncrement(int output)
+		{
+
+			SendCommand(string.Format("{0}+V", output));
+		}
+		public void OutputVolumeDecrement(int output)
+		{
+
+			SendCommand(string.Format("{0}-V", output));
+		}
+		public void OutputVolumeSet(int output, int level)
+		{
+			SendCommand(string.Format("{0}*{1}V", output, level));
+		}
+		public void OutputMuteOn(int output)
+		{
+			SendCommand(string.Format("{0}*3Z", output));
+		}
+		public void OutputMuteOff(int output)
+		{
+			SendCommand(string.Format("{0}*0Z", output));
+		}
+		public void OutputMuteToggle(int output)
+		{
+			int state = OutputAudioMuteFeedbacks[output].Value ? 0 : 3;
+			SendCommand(string.Format("{0}*{1}Z", output, state));
+		}
 
         static string TieVideoInputCmd(int input, int output)
         {
