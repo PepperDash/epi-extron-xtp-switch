@@ -151,6 +151,16 @@ jobs:
         with:
           name: Build
           path: ./${{ env.SOLUTION_FILE}}-${{ env.VERSION}}.zip
+      # Create the release on the source repo
+      - name: Create Release
+        id: create_release
+        uses: fleskesvor/create-release@feature/support-target-commitish
+        with:
+          tag_name: ${{ env.VERSION  }}
+          release_name: ${{ env.VERSION }}
+          prerelease: ${{contains('debug', env.BUILD_TYPE)}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Upload the build package to the release
       - name: Upload Release Package
         id: upload_release
