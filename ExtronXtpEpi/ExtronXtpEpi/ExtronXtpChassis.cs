@@ -262,6 +262,10 @@ namespace ExtronXtpEpi
 			{
 				SendInitialCommands();
 			}
+			else if (e.Text.Contains("Password:"))
+			{
+				SendInitialCommands();
+			}
 			else
 			{
 				return;
