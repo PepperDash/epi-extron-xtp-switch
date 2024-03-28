@@ -1,3 +1,3 @@
 @Echo ON
-nuget install .\packages.config -OutputDirectory .\Packages\ -excludeVersion 
+nuget install .\packages.config -OutputDirectory .\packages\ -excludeVersion 
 PAUSE
