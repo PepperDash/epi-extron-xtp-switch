@@ -95,9 +95,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtronXtpControllerInitiaze.cs" />
-    <Compile Include="ExtronXtpControllerLinkToApi.cs" />
-    <Compile Include="ExtronXtpControllerProcessResponse.cs" />
+    <Compile Include="DebugExt.cs" />
     <Compile Include="ExtronXtpPropertiesConfig.cs" />
     <Compile Include="FeedbackHelpers\BoolWithFeedback.cs" />
     <Compile Include="ExtronXtpController.cs" />

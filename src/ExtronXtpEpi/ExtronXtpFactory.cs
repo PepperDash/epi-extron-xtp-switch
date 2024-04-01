@@ -17,19 +17,19 @@ namespace ExtronXtpEpi
 
 		public override EssentialsDevice BuildDevice(DeviceConfig dc)
 		{
-			Debug.Console(0, "Factory Attempting to create new device from type: {0}", dc.Type);
+			Debug.Console(DebugExt.Trace, "Factory Attempting to create new device from type: {0}", dc.Type, dc.Name);
 
 			var propertiesConfig = dc.Properties.ToObject<ExtronXtpPropertiesConfig>();
 			if (propertiesConfig == null)
 			{
-				Debug.Console(2, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
+				Debug.Console(DebugExt.Verbose, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
 				return null;
 			}
 
 			var comms = CommFactory.CreateCommForDevice(dc);
 			if(comms != null) return new ExtronXtpController(dc.Key, dc.Name, propertiesConfig, comms);
 
-			Debug.Console(0, "[{0}] Factory: failed to create {2} comms for {1}", dc.Key, dc.Name, dc.Properties["control"]["method"].Value<string>());
+			Debug.Console(DebugExt.Trace, "[{0}] Factory: failed to create {2} comms for {1}", dc.Key, dc.Name, dc.Properties["control"]["method"].Value<string>());
 			return null;
 		}
 	}
