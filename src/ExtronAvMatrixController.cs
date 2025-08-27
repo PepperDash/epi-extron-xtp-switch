@@ -312,14 +312,20 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     switch (signalType.ToLower())
                     {
                         case "all":
-                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
+                            //(outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
+                            //UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
+                            // video
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
+                            UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
+                            // audio
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot);
                             UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
                             break;
-                        case "video":
+                        case "vid":
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
                             UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
                             break;
-                        case "audio":
+                        case "aud":
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot);
                             UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
                             break;
