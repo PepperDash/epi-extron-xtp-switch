@@ -289,7 +289,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             // Process Extron SIS switch responses using unified regex pattern
             // Pattern: "Out[index] In[index] [All|Video|Audio]"
-            var switchResponseRegex = new System.Text.RegularExpressions.Regex(@"Out(\d+)\s+In(\d+)\s+(All|Video|Audio)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            //var switchResponseRegex = new System.Text.RegularExpressions.Regex(@"Out(\d+)\s+In(\d+)\s+(All|Vid|Aud)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            var switchResponseRegex = new System.Text.RegularExpressions.Regex(@"Out(0?\d|[1-9]\d)\s+In(0?\d|[1-9]\d)\s+(All|Vid|Aud)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             var switchMatch = switchResponseRegex.Match(message);
 
             if (switchMatch.Success)
