@@ -176,12 +176,12 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private string GetInputPortSelector(int slotNum)
         {
-            return $"in{slotNum}";
+            return $"input{slotNum}";
         }
 
         private string GetOutputPortSelector(int slotNum)
         {
-            return $"out{slotNum}";
+            return $"output{slotNum}";
         }
 
 
