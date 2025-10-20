@@ -261,7 +261,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 key,
                 eRoutingSignalType.AudioVideo,
                 eRoutingPortConnectionType.Hdmi,
-                key,
+                slotNum,
                 this, 
                 true)
               {
@@ -284,7 +284,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 key,
                 eRoutingSignalType.AudioVideo,
                 eRoutingPortConnectionType.Hdmi,
-                key,
+                slotNum,
                 this,
                 true)
               {
@@ -313,7 +313,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 key,
                 eRoutingSignalType.AudioVideo,
                 eRoutingPortConnectionType.Hdmi,
-                key,
+                slotNum,
                 this,
                 true));
 
