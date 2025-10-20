@@ -242,7 +242,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupClearInputSlot(uint slotNum)
         {
-            var key = $"inputNum{slotNum}";
+            var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new ClearInput($"{key}", $"{name}", (int)slotNum);
 
@@ -265,7 +265,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupInputSlot(uint slotNum)
         {
-            var key = $"inputNum{slotNum}";
+            var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new InputSlot($"{key}", $"{name}", (int)slotNum);
 
@@ -294,7 +294,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             if (slotNum == 0) return;
 
-            var key = $"outputNum{slotNum}";
+            var key = $"output{slotNum}";
             var name = OutputNames.ContainsKey(slotNum) ? OutputNames[slotNum] : $"Output {slotNum}";
             var slot = new OutputSlot($"outputNum{slotNum}", $"{name}", (int)slotNum);
 
@@ -381,7 +381,9 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     switch (signalType.ToLower())
                     {
                         case "all":
-                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
+                            //(outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot); 
                             break;
                         case "vid":
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
@@ -447,7 +449,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     var inputSlot = InputSlots.FirstOrDefault(x => x.Value.SlotNumber == inputNumber).Value as InputSlot;
                     if (inputSlot == null)
                     {
-                        this.LogError("ParseSyncStatus: Could not find inputNum slot {0} for sync status update", inputNumber);
+                        this.LogError("ParseSyncStatus: Could not find inputslot.SlotNumber {0} for sync status update", inputNumber);
                         return;
                     }
 
@@ -738,13 +740,13 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
                 if (inputSlot == null)
                 {
-                    this.LogError($"Route: failed to find inputNum slot `{inputSlotKey}`");
+                    this.LogError($"Route: failed to find inputSlotKey `{inputSlotKey}`");
                     return;
                 }
 
                 if (outputSlot == null)
                 {
-                    this.LogError($"Route: failed to find outputNum slot `{outputSlotKey}`");
+                    this.LogError($"Route: failed to find outputSlotKey `{outputSlotKey}`");
                     return;
                 }
 
