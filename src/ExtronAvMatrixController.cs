@@ -386,10 +386,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     switch (signalType.ToLower())
                     {
                         case "all":
-                            // video
-                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
-                            // audio
-                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot);
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
                             break;
                         case "vid":
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
@@ -431,11 +428,14 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                         var hasSync = syncBitmap[i] == '1';
 
                         var inputSlot = InputSlots.FirstOrDefault(x => x.Value.SlotNumber == inputNumber).Value as InputSlot;
-                        if (inputSlot != null)
+                        if (inputSlot == null)
                         {
-                            inputSlot.VideoSyncDetected = hasSync;
-                            this.LogDebug("ProcessFeedbackMessage: Input {0} sync status is {1}", inputNumber, hasSync);
+                            this.LogError("ProcessFeedbackMessage: Could not find input slot {0} for sync status update", inputNumber);
+                            return;
                         }
+
+                        inputSlot.VideoSyncDetected = hasSync;
+                        this.LogDebug("ProcessFeedbackMessage: Input {0} sync status is {1}", inputNumber, hasSync);
                     }
                 }
                 return;
