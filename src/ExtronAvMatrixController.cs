@@ -2,7 +2,6 @@
 // For Basic SIMPL#Pro classes
 
 using Crestron.SimplSharpPro.DeviceSupport;
-using Crestron.SimplSharpPro.DM;
 using PepperDash.Core;
 using PepperDash.Core.Logging;
 using PepperDash.Essentials.Core;
@@ -12,11 +11,9 @@ using PepperDash.Essentials.Core.Queues;
 using PepperDash.Essentials.Core.Routing;
 using PepperDash.Essentials.Plugin.Errors;
 using PepperDash.Essentials.Plugin.IOs;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Crestron.SimplSharpPro.DM.Audio;
 
 namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 {
