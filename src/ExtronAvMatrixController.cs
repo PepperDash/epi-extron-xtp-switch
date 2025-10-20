@@ -134,7 +134,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             receiveQueue = new GenericQueue(key + "-rxqueue");  // If you need to set the thread priority, use one of the available overloaded constructors.
 
             InputNames = new Dictionary<uint, string>();
-            OutputNames = new Dictionary<uint, string>();            
+            OutputNames = new Dictionary<uint, string>();
 
             InputSlots = new Dictionary<string, IRoutingInputSlot>();
             OutputSlots = new Dictionary<string, IRoutingOutputSlot>();
@@ -233,7 +233,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 this.LogInformation($"SetupSlots: InputPorts Key={item.Key}, Port={item.Port}, Type={item.Type}, Selector={item.Selector}, ConnectionType={item.ConnectionType}, Parent={item.ParentDevice}");
             }
 
-            foreach(var item in OutputPorts)
+            foreach (var item in OutputPorts)
             {
                 this.LogInformation($"SetupSlots: OutputPorts Key={item.Key}, Port={item.Port}, Type={item.Type}, Selector={item.Selector}, ConnectionType={item.ConnectionType}, Parent={item.ParentDevice}");
             }
@@ -241,11 +241,11 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupClearInputSlot(uint slotNum)
         {
-            var key = $"input{slotNum}";
+            var key = $"inputNum{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new ClearInput($"{key}", $"{name}", (int)slotNum);
 
-            InputSlots.Add(slotNum.ToString(), slot);
+            InputSlots.Add(key, slot);
 
             InputPorts.Add(
               new RoutingInputPort(
@@ -253,7 +253,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 eRoutingSignalType.AudioVideo,
                 eRoutingPortConnectionType.Hdmi,
                 slotNum,
-                this, 
+                this,
                 true)
               {
                   FeedbackMatchObject = key,
@@ -264,11 +264,11 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupInputSlot(uint slotNum)
         {
-            var key = $"input{slotNum}";
+            var key = $"inputNum{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new InputSlot($"{key}", $"{name}", (int)slotNum);
 
-            InputSlots.Add(slotNum.ToString(), slot);
+            InputSlots.Add(key, slot);
 
             InputPorts.Add(
               new RoutingInputPort(
@@ -291,11 +291,11 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupOutputSlot(uint slotNum)
         {
-            if(slotNum == 0) return;
+            if (slotNum == 0) return;
 
-            var key = $"output{slotNum}";
+            var key = $"outputNum{slotNum}";
             var name = OutputNames.ContainsKey(slotNum) ? OutputNames[slotNum] : $"Output {slotNum}";
-            var slot = new OutputSlot($"output{slotNum}", $"{name}", (int)slotNum);
+            var slot = new OutputSlot($"outputNum{slotNum}", $"{name}", (int)slotNum);
 
             OutputSlots.Add(key, slot);
 
@@ -399,13 +399,13 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     UpdateCurrentRoutes(inputNumber, outputNumber);
 
                 }
-                else if(outputSlot == null)
+                else if (outputSlot == null)
                 {
-                    this.LogWarning("ProcessFeedbackMessage: Could not find output slot {0}", outputNumber);
+                    this.LogWarning("ProcessFeedbackMessage: Could not find outputNum slot {0}", outputNumber);
                 }
-                else if(inputSlot == null)
+                else if (inputSlot == null)
                 {
-                    this.LogWarning("ProcessFeedbackMessage: Could not find input slot {0}", inputNumber);
+                    this.LogWarning("ProcessFeedbackMessage: Could not find inputNum slot {0}", inputNumber);
                 }
 
                 return;
@@ -430,7 +430,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                         var inputSlot = InputSlots.FirstOrDefault(x => x.Value.SlotNumber == inputNumber).Value as InputSlot;
                         if (inputSlot == null)
                         {
-                            this.LogError("ProcessFeedbackMessage: Could not find input slot {0} for sync status update", inputNumber);
+                            this.LogError("ProcessFeedbackMessage: Could not find inputNum slot {0} for sync status update", inputNumber);
                             return;
                         }
 
@@ -552,7 +552,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             // view all audio ties
             SendText("\x1B0*1*2VC");
 
-            // query each output for video and audio
+            // query each outputNum for video and audio
             for (int i = 1; i < outputCount; i++)
             {
                 SendText($"{i}{VideoSwitch}");
@@ -561,7 +561,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
 
         /// <summary>
-        /// Poll device for input sync detection status
+        /// Poll device for inputNum sync detection status
         /// </summary>
         /// <remarks>
         /// Example return: "Frq00 01100110\r" (8 inputs, inputs 2, 3, 6, and 7 have sync)
@@ -606,10 +606,10 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             StatusFeedback.LinkInputSig(trilist.UShortInput[joinMap.Status.JoinNumber]);
             OnlineFeedback.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline.JoinNumber]);
 
-            // Clear input name feedback
+            // Clear inputNum name feedback
             InputNameFeedbacks[0].LinkInputSig(trilist.StringInput[joinMap.NoRouteName.JoinNumber]);
 
-            // input name feedbacks
+            // inputNum name feedbacks
             for (uint i = 1; i <= inputCount; i++)
             {
                 var input = i;
@@ -617,7 +617,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 LinkInputsToApi(trilist, joinMap, input);
             }
 
-            // output name feedbacks and routing control/feedback
+            // outputNum name feedbacks and routing control/feedback
             for (uint i = 1; i <= outputCount; i++)
             {
                 var output = i;
@@ -641,7 +641,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             var inputJoinOffset = input - 1;
 
-            this.LogInformation($"LinkInputsToApi: input={input}, inputJoinOffset={inputJoinOffset}");
+            this.LogInformation($"LinkInputsToApi: inputNum={input}, inputJoinOffset={inputJoinOffset}");
 
             InputNameFeedbacks[input].LinkInputSig(trilist.StringInput[joinMap.InputNames.JoinNumber + inputJoinOffset]);
             InputVideoNameFeedbacks[input].LinkInputSig(trilist.StringInput[joinMap.InputVideoNames.JoinNumber + inputJoinOffset]);
@@ -651,12 +651,12 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void LinkOutputsToApi(BasicTriList trilist, ExtronAvMatrixJoinMap joinMap, uint output)
         {
-            if(output == 0)
+            if (output == 0)
                 return;
 
             var outputJoinOffset = output - 1;
 
-            this.LogInformation($"LinkOutputsToApi: output={output}, outputJoinOffset={outputJoinOffset}");
+            this.LogInformation($"LinkOutputsToApi: outputNum={output}, outputJoinOffset={outputJoinOffset}");
 
 
             // Routing Control
@@ -724,53 +724,56 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
 
         /// <summary>
-        /// Routes an input to an output for the specified signal type(s)
+        /// Routes an inputNum to an outputNum for the specified signal type(s)
         /// </summary>
         /// <param name="inputSlotKey"></param>
         /// <param name="outputSlotKey"></param>
         /// <param name="type"></param>
         public void Route(string inputSlotKey, string outputSlotKey, eRoutingSignalType type)
         {
-            if (type.HasFlag(eRoutingSignalType.AudioVideo))
+            try
             {
-                var input = InputSlots[inputSlotKey] as InputSlot;
-                var output = OutputSlots[outputSlotKey] as OutputSlot;
-                if (input == null || output == null)
+                var inputSlot = InputSlots.TryGetValue(inputSlotKey, out var inSlot) ? inSlot as InputSlot : null;
+                var outputSlot = OutputSlots.TryGetValue(outputSlotKey, out var outSlot) ? outSlot as OutputSlot : null;
+
+                if (inputSlot == null)
                 {
-                    this.LogError("Route: Invalid input or output slot key");
+                    this.LogError($"Route: failed to find inputNum slot `{inputSlotKey}`");
                     return;
                 }
-                SetAvRoute(input.SlotNumber, output.SlotNumber);
+
+                if (outputSlot == null)
+                {
+                    this.LogError($"Route: failed to find outputNum slot `{outputSlotKey}`");
+                    return;
+                }
+
+                if (type.HasFlag(eRoutingSignalType.AudioVideo))
+                {
+                    SetAvRoute(inputSlot.SlotNumber, outputSlot.SlotNumber);
+                    return;
+                }
+
+                if (type.HasFlag(eRoutingSignalType.Video))
+                {
+                    SetVideoRoute(inputSlot.SlotNumber, outputSlot.SlotNumber);
+                }
+
+                if (type.HasFlag(eRoutingSignalType.Audio))
+                {
+                    SetAudioRoute(inputSlot.SlotNumber, outputSlot.SlotNumber);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.LogError("Route: {inputNum} to {outputNum} exception {message}", inputSlotKey, outputSlotKey, ex.Message);
+                this.LogDebug(ex, "Route: Exception StackTrace");
                 return;
-            }
-
-            if (type.HasFlag(eRoutingSignalType.Video))
-            {
-                var input = InputSlots[inputSlotKey] as InputSlot;
-                var output = OutputSlots[outputSlotKey] as OutputSlot;
-                if (input == null || output == null)
-                {
-                    this.LogError("Route: Invalid input or output slot key");
-                    return;
-                }
-                SetVideoRoute(input.SlotNumber, output.SlotNumber);
-            }
-
-            if (type.HasFlag(eRoutingSignalType.Audio))
-            {
-                var input = InputSlots[inputSlotKey] as InputSlot;
-                var output = OutputSlots[outputSlotKey] as OutputSlot;
-                if (input == null || output == null)
-                {
-                    this.LogError("Route: Invalid input or output slot key");
-                    return;
-                }
-                SetAudioRoute(input.SlotNumber, output.SlotNumber);
             }
         }
 
         /// <summary>
-        /// Executes a switch from an input to an output for the specified signal type(s)
+        /// Executes a switch from an inputNum to an outputNum for the specified signal type(s)
         /// </summary>
         /// <param name="inputSelector"></param>
         /// <param name="outputSelector"></param>
@@ -779,49 +782,49 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             try
             {
-                this.LogVerbose($"ExecuteSwitch: Making {signalType.ToString().ToLower()} route from input {inputSelector} to output {outputSelector}");
+                this.LogVerbose($"ExecuteSwitch: Making {signalType.ToString().ToLower()} route from inputNum {inputSelector} to outputNum {outputSelector}");
 
-                var input = Convert.ToUInt16(inputSelector);
-                var output = Convert.ToUInt16(outputSelector);               
+                var inputNum = Convert.ToUInt16(inputSelector);
+                var outputNum = Convert.ToUInt16(outputSelector);
 
                 // route a/v
                 if (signalType.HasFlag(eRoutingSignalType.AudioVideo))
                 {
-                    SetAvRoute(input, output);
-                    UpdateCurrentRoutes(input, output);
+                    SetAvRoute(inputNum, outputNum);
+                    UpdateCurrentRoutes(inputNum, outputNum);
                     return;
                 }
                 // route video
                 if (signalType.HasFlag(eRoutingSignalType.Video))
                 {
-                    SetVideoRoute(input, output);
-                    UpdateCurrentRoutes(input, output);
+                    SetVideoRoute(inputNum, outputNum);
+                    UpdateCurrentRoutes(inputNum, outputNum);
                 }
                 // route audio
                 if (signalType.HasFlag(eRoutingSignalType.Audio))
                 {
-                    SetAudioRoute(input, output);
-                    UpdateCurrentRoutes(input, output);
+                    SetAudioRoute(inputNum, outputNum);
+                    UpdateCurrentRoutes(inputNum, outputNum);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                this.LogError("ExecuteSwitch: {input} to {output} exception {message}", inputSelector, outputSelector, ex.Message);
+                this.LogError("ExecuteSwitch: {inputNum} to {outputNum} exception {message}", inputSelector, outputSelector, ex.Message);
                 this.LogDebug(ex, "ExecuteSwitch: Exception StackTrace");
                 return;
             }
-            
+
         }
 
         /// <summary>
-        /// Updates the current routes based on the input and output numbers.
+        /// Updates the current routes based on the inputNum and outputNum numbers.
         /// </summary>
         /// <param name="inputSelector"></param>
         /// <param name="outputSelector"></param>
         private void UpdateCurrentRoutes(uint inputSelector, uint outputSelector)
         {
             RouteSwitchDescriptor descriptor;
-            
+
             descriptor = GetRouteDescriptorByOutputPort(outputSelector);
             this.LogDebug("UpdateCurrentRoutes: Found existing descriptor: {0}", descriptor != null ? "Yes" : "No");
 
@@ -829,7 +832,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             var outputPort = GetRoutingOutputPortForSelector(outputSelector);
 
-            this.LogDebug("UpdateCurrentRoutes: Updating route for input {inputNum} to output {outputNum}", this, outputSelector, inputSelector);
+            this.LogDebug("UpdateCurrentRoutes: Updating route for inputNum {inputNum} to outputNum {outputNum}", this, outputSelector, inputSelector);
 
             if (outputPort is null)
             {
@@ -852,16 +855,16 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
 
         /// <summary>
-        /// Gets the route descriptor for the specified output port number.
+        /// Gets the route descriptor for the specified outputNum port number.
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
         private RouteSwitchDescriptor GetRouteDescriptorByOutputPort(uint selector)
         {
-            this.LogDebug("GetRouteDescriptorByOutputPort: Looking for route descriptor with output port selector {0}", selector);
+            this.LogDebug("GetRouteDescriptorByOutputPort: Looking for route descriptor with outputNum port selector {0}", selector);
             return CurrentRoutes.FirstOrDefault(rd =>
             {
-                this.LogDebug("GetRouteDescriptorByOutputPort: Checking descriptor with output port selector {0}", rd.OutputPort.Selector);
+                this.LogDebug("GetRouteDescriptorByOutputPort: Checking descriptor with outputNum port selector {0}", rd.OutputPort.Selector);
                 if (rd.OutputPort.Selector is not uint opSelector)
                 {
                     this.LogDebug("GetRouteDescriptorByOutputPort: Output port selector is not a uint");
@@ -874,17 +877,17 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
 
         /// <summary>
-        /// Gets the routing input port for the specified input number.
+        /// Gets the routing inputNum port for the specified inputNum number.
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
         private RoutingInputPort GetRoutingInputPortForSelector(uint selector)
         {
-            this.LogDebug("GetRoutingInputPortForSelector: Looking for input port with selector {0}", selector);
+            this.LogDebug("GetRoutingInputPortForSelector: Looking for inputNum port with selector {0}", selector);
 
             return InputPorts.FirstOrDefault(ip =>
             {
-                this.LogDebug("GetRoutingInputPortForSelector: Checking input port with selector {0}", ip.Selector);
+                this.LogDebug("GetRoutingInputPortForSelector: Checking inputNum port with selector {0}", ip.Selector);
                 if (ip.Selector is not uint ipSelector)
                 {
                     this.LogDebug("GetRoutingInputPortForSelector: Input port selector is not a uint");
@@ -898,7 +901,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
 
         /// <summary>
-        /// Gets the routing output port for the specified output number.
+        /// Gets the routing outputNum port for the specified outputNum number.
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
