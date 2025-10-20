@@ -1,6 +1,7 @@
 ﻿// For Basic SIMPL# Classes
 // For Basic SIMPL#Pro classes
 
+using Crestron.SimplSharpPro.CrestronThread;
 using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
 using PepperDash.Core.Logging;
@@ -537,10 +538,15 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             // information request
             SendText("I");
+
+            Thread.Sleep(500);
+
             // part number request
             //SendText("N");
             // firmware version request (verbose)
             SendText("0Q");
+
+            Thread.Sleep(500);
 
             PollSync();
         }
