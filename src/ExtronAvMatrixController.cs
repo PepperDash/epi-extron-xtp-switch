@@ -188,7 +188,11 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 // device comms is IP **ELSE** device comms is RS232
                 socket.ConnectionChange += Socket_ConnectionChange;
                 Connect = true;
+
+                return;
             }
+
+            CommunicationMonitor.Start();
         }
 
         private string GetInputPortSelector(int slotNum)
@@ -546,6 +550,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             //SendText("N");
             // firmware version request (verbose)
             SendText("0Q");
+
+            PollSync();
         }
 
         public void PollRoutes()
@@ -780,33 +786,43 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// <param name="signalType"></param>
         public void ExecuteSwitch(object inputSelector, object outputSelector, eRoutingSignalType signalType)
         {
-            this.LogVerbose($"ExecuteSwitch: Making {signalType.ToString().ToLower()} route from input {inputSelector} to output {outputSelector}");
-
-            var input = Convert.ToUInt16(inputSelector);
-            var output = Convert.ToUInt16(outputSelector);
-
-            var inputSlot = GetInputPortSelector(input);
-            var outputSlot = GetOutputPortSelector(output);
-
-            // route a/v
-            if (signalType.HasFlag(eRoutingSignalType.AudioVideo))
+            try
             {
-                SetAvRoute(input, output);
-                UpdateCurrentRoutes(inputSlot, outputSlot);
+                this.LogVerbose($"ExecuteSwitch: Making {signalType.ToString().ToLower()} route from input {inputSelector} to output {outputSelector}");
+
+                var input = Convert.ToUInt16(inputSelector);
+                var output = Convert.ToUInt16(outputSelector);
+
+                var inputSlot = GetInputPortSelector(input);
+                var outputSlot = GetOutputPortSelector(output);
+
+                // route a/v
+                if (signalType.HasFlag(eRoutingSignalType.AudioVideo))
+                {
+                    SetAvRoute(input, output);
+                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                    return;
+                }
+                // route video
+                if (signalType.HasFlag(eRoutingSignalType.Video))
+                {
+                    SetVideoRoute(input, output);
+                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                }
+                // route audio
+                if (signalType.HasFlag(eRoutingSignalType.Audio))
+                {
+                    SetAudioRoute(input, output);
+                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                }
+            }
+            catch(Exception ex)
+            {
+                this.LogError("ExecuteSwitch: {input} to {output} exception {message}", inputSelector, outputSelector, ex.Message);
+                this.LogDebug(ex, "ExecuteSwitch: Exception StackTrace");
                 return;
             }
-            // route video
-            if (signalType.HasFlag(eRoutingSignalType.Video))
-            {
-                SetVideoRoute(input, output);
-                UpdateCurrentRoutes(inputSlot, outputSlot);
-            }
-            // route audio
-            if (signalType.HasFlag(eRoutingSignalType.Audio))
-            {
-                SetAudioRoute(input, output);
-                UpdateCurrentRoutes(inputSlot, outputSlot);
-            }
+            
         }
 
         /// <summary>
