@@ -9,11 +9,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
     /// Plugin device factory for devices that use IBasicCommunication
     /// </summary>
     public class ExtronAvMatrixFactory : EssentialsPluginDeviceFactory<ExtronAvMatrixController>
-    {
-        public const string ExtronSis = "extronSis";
-        public const string ExtronXtp = "extronXtp";
-        public const string ExtronDtp = "extronDtp";
-
+    {        
         /// <summary>
         /// Plugin device factory constructor
         /// </summary>
@@ -25,7 +21,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             // In the constructor we initialize the list with the typenames that will build an instance of this device
             // TODO [ ] Update the TypeNames for the plugin being developed
-            TypeNames = new List<string>() { ExtronSis, ExtronXtp, ExtronDtp };
+            TypeNames = new List<string>() { "extronSis", "extronXtp", "extronDxp" };
         }
 
         /// <summary>
