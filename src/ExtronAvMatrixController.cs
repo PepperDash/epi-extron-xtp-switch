@@ -352,16 +352,10 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 // Parse an error response from device
                 var errorCode = ExtronSisErrors.ParseErrorResponse(message);
                 var errorMessage = ExtronSisErrors.FormatErrorMessage(errorCode);
-                this.LogError("ProcessFeedbackMessage: {0}", errorMessage);
+                this.LogError($"ProcessFeedbackMessage: {errorCode} - {errorMessage}");
                 return;
             }
 
-            // Process firmware version response (verbose)
-            // Pattern: "1.23-1.00(1.81LX-DTPCP108 -Fri, 31 Jul 2015 00:00:00 UTC)-1.00*(2.03LX-DTPCP108 -Fri, 30 Nov 2018 16:39:21 UTC)"
-            if (ParseFirmwareVersion(message))
-            {
-                return;
-            }
 
             // Process Extron SIS switch responses using unified regex pattern
             // Pattern: "Out[XX] In[YY] [All|Vid|Aud]"
@@ -412,33 +406,18 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 return;
             }
 
-            // Handle sync status bitmap response (e.g., "Frq00 01100110")
+            // Handle sink status bitmap response (e.g., "Frq00 01100110")
             if (message.StartsWith("Frq"))
             {
-                var syncRegex = new System.Text.RegularExpressions.Regex(@"Frq\d+\s+([01]+)");
-                var syncMatch = syncRegex.Match(message);
-                if (syncMatch.Success)
-                {
-                    var syncBitmap = syncMatch.Groups[1].Value;
-                    this.LogDebug("ProcessFeedbackMessage: Sync status bitmap = {0}", syncBitmap);
+                ParseSyncStatus(message);
+                return;
+            }
 
-                    // Process each bit in the bitmap
-                    for (int i = 0; i < syncBitmap.Length && i < inputCount; i++)
-                    {
-                        var inputNumber = i + 1; // Inputs are 1-based
-                        var hasSync = syncBitmap[i] == '1';
-
-                        var inputSlot = InputSlots.FirstOrDefault(x => x.Value.SlotNumber == inputNumber).Value as InputSlot;
-                        if (inputSlot == null)
-                        {
-                            this.LogError("ProcessFeedbackMessage: Could not find inputNum slot {0} for sync status update", inputNumber);
-                            return;
-                        }
-
-                        inputSlot.VideoSyncDetected = hasSync;
-                        this.LogDebug("ProcessFeedbackMessage: Input {0} sync status is {1}", inputNumber, hasSync);
-                    }
-                }
+            if (message.StartsWith("Ver"))
+            {
+                // Process firmware version response (verbose)
+                // Pattern: "Ver00*1.01-2.05.0000-b004*(2.07LX-0DXP HD PLUS     -Thu, 18 Jan 2024 06:02 UTC)-?.??"
+                ParseFirmwareVersion(message);
                 return;
             }
 
@@ -447,44 +426,75 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
 
         /// <summary>
+        /// Parses Extron FRQ response
+        /// </summary>
+        /// <param name="message"></param>
+        private void ParseSyncStatus(string message)
+        {
+            var syncRegex = new System.Text.RegularExpressions.Regex(@"Frq\d+\s+([01]+)");
+            var syncMatch = syncRegex.Match(message);
+            if (syncMatch.Success)
+            {
+                var syncBitmap = syncMatch.Groups[1].Value;
+                this.LogDebug("ParseSyncStatus: Sync status bitmap = {0}", syncBitmap);
+
+                // Process each bit in the bitmap
+                for (int i = 0; i < syncBitmap.Length && i < inputCount; i++)
+                {
+                    var inputNumber = i + 1; // Inputs are 1-based
+                    var hasSync = syncBitmap[i] == '1';
+
+                    var inputSlot = InputSlots.FirstOrDefault(x => x.Value.SlotNumber == inputNumber).Value as InputSlot;
+                    if (inputSlot == null)
+                    {
+                        this.LogError("ParseSyncStatus: Could not find inputNum slot {0} for sync status update", inputNumber);
+                        return;
+                    }
+
+                    inputSlot.VideoSyncDetected = hasSync;
+                    
+                    this.LogDebug("ParseSyncStatus: Input {0} sync status is {1}", inputNumber, hasSync);
+                }
+            }
+        }
+
+        /// <summary>
         /// Parses Extron firmware version response (verbose format)
         /// </summary>
         /// <param name="message">The message to parse</param>
         /// <returns>True if the message was a firmware version response and was processed</returns>
-        private bool ParseFirmwareVersion(string message)
+        private void ParseFirmwareVersion(string message)
         {
-            // Firmware version pattern for verbose response from "0Q" command
-            // Example: "1.23-1.00(1.81LX-DTPCP108 -Fri, 31 Jul 2015 00:00:00 UTC)-1.00*(2.03LX-DTPCP108 -Fri, 30 Nov 2018 16:39:21 UTC)"
+            // New firmware version pattern for "Ver00*..." format
+            // Example: "Ver00*1.01-2.05.0000-b004*(2.07LX-0DXP HD PLUS     -Thu, 18 Jan 2024 06:02 UTC)-?.??"
             var firmwareRegex = new System.Text.RegularExpressions.Regex(
-                @"^(\d+\.\d+)-(\d+\.\d+)\(([^)]+)\)-(\d+\.\d+)\*\(([^)]+)\)$",
+                @"^Ver\d+\*([^-]+)-([^*]+)\*\(([^)]+)\)-(.+)$",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
             var match = firmwareRegex.Match(message.Trim());
 
             if (match.Success)
             {
-                var mainVersion = match.Groups[1].Value;          // e.g., "1.23"
-                var bootVersion = match.Groups[2].Value;          // e.g., "1.00"
-                var bootDetails = match.Groups[3].Value;          // e.g., "1.81LX-DTPCP108 -Fri, 31 Jul 2015 00:00:00 UTC"
-                var appVersion = match.Groups[4].Value;           // e.g., "1.00"
-                var appDetails = match.Groups[5].Value;           // e.g., "2.03LX-DTPCP108 -Fri, 30 Nov 2018 16:39:21 UTC"
+                var mainVersion = match.Groups[1].Value;          // e.g., "1.01"
+                var buildVersion = match.Groups[2].Value;         // e.g., "2.05.0000-b004"
+                var deviceDetails = match.Groups[3].Value;        // e.g., "2.07LX-0DXP HD PLUS     -Thu, 18 Jan 2024 06:02 UTC"
+                var additionalInfo = match.Groups[4].Value;       // e.g., "?.??"
 
-                this.LogDebug("ParseFirmwareVersion: Main = {0}, Boot = {1}, App = {2}", mainVersion, bootVersion, appVersion);
-                this.LogDebug("ParseFirmwareVersion: Boot details = {0}", bootDetails);
-                this.LogDebug("ParseFirmwareVersion: App details = {0}", appDetails);
+                this.LogDebug("ParseFirmwareVersion: Main = {0}, Build = {1}, Additional = {2}", mainVersion, buildVersion, additionalInfo);
+                this.LogDebug("ParseFirmwareVersion: Device details = {0}", deviceDetails);
 
-                // Extract model number from the boot or app details
-                var modelRegex = new System.Text.RegularExpressions.Regex(@"(\d+\.\d+)([A-Z]+-[A-Z0-9]+)");
-                var modelMatch = modelRegex.Match(bootDetails);
-                var modelNumber = modelMatch.Success ? modelMatch.Groups[2].Value : "";
+                // Extract model number from device details
+                var modelRegex = new System.Text.RegularExpressions.Regex(@"(\d+\.\d+)([A-Z]+-[A-Z0-9\s]+)");
+                var modelMatch = modelRegex.Match(deviceDetails);
+                var modelNumber = "";
 
-                // Extract application firmware version from app details
-                var appFirmwareRegex = new System.Text.RegularExpressions.Regex(@"(\d+\.\d+)([A-Z]+-[A-Z0-9]+)");
-                var appFirmwareMatch = appFirmwareRegex.Match(appDetails);
-                var appFirmwareVersion = appFirmwareMatch.Success ? appFirmwareMatch.Groups[1].Value : appVersion;
+                if (modelMatch.Success)
+                {
+                    modelNumber = modelMatch.Groups[2].Value.Trim();
+                }
 
                 // Create comprehensive firmware version string
-                var fullFirmwareVersion = $"Main: {mainVersion}, Boot: {bootVersion}, App: {appFirmwareVersion}";
+                var fullFirmwareVersion = $"Main: {mainVersion}, Build: {buildVersion}";
                 if (!string.IsNullOrEmpty(modelNumber))
                 {
                     fullFirmwareVersion += $" ({modelNumber})";
@@ -493,25 +503,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 // Update DeviceInfo with parsed firmware information
                 UpdateDeviceInfoWithFirmware(fullFirmwareVersion, modelNumber);
 
-                this.LogInformation("ParseFirmwareVersion: Device firmware version to {0}", fullFirmwareVersion);
-                return true;
+                this.LogInformation("ParseFirmwareVersion: Device firmware version to {0}", fullFirmwareVersion);                
             }
-
-            // Check for simpler firmware response patterns (fallback)
-            var simpleFirmwareRegex = new System.Text.RegularExpressions.Regex(
-                @"^(\d+\.\d+).*$",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-            var simpleMatch = simpleFirmwareRegex.Match(message.Trim());
-            if (simpleMatch.Success && message.Length > 5) // Basic sanity check
-            {
-                var firmwareVersion = message.Trim();
-                this.LogDebug("ParseFirmwareVersion: Simple firmware version detected as {0}", firmwareVersion);
-                UpdateDeviceInfoWithFirmware(firmwareVersion, "");
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -543,6 +536,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             // part number request
             //SendText("N");
+
             // firmware version request (verbose)
             SendText("0Q");
 

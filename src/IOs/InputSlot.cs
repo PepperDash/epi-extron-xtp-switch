@@ -1,4 +1,5 @@
-﻿using PepperDash.Essentials.Core;
+﻿using PepperDash.Core.Logging;
+using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Routing;
 using System;
 
@@ -30,7 +31,10 @@ namespace PepperDash.Essentials.Plugin.IOs
             {
                 if (videoSyncDetected != value)
                 {
+                    this.LogInformation($"VideoSyncDetected: value == {value}");
                     videoSyncDetected = value;
+
+                    this.LogInformation($"VideoSyncDetected: VideoSyncChanged is {(VideoSyncChanged == null ? "null" : "not null")}");
                     VideoSyncChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
