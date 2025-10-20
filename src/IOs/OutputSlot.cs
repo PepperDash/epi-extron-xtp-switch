@@ -12,11 +12,11 @@ namespace PepperDash.Essentials.Plugin.IOs
         public string RxDeviceKey => string.Empty; // This device doesn't use receivers so this is empty
 
         private readonly Dictionary<eRoutingSignalType, IRoutingInputSlot> currentRoutes = new()
-    {
-      { eRoutingSignalType.AudioVideo, default },
-      { eRoutingSignalType.Audio, default },
-      { eRoutingSignalType.Video, default }
-    };
+        {
+          { eRoutingSignalType.AudioVideo, default },
+          { eRoutingSignalType.Audio, default },
+          { eRoutingSignalType.Video, default }
+        };
 
         public Dictionary<eRoutingSignalType, IRoutingInputSlot> CurrentRoutes => currentRoutes;
 

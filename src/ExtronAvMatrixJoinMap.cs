@@ -1,21 +1,22 @@
 ﻿using PepperDash.Essentials.Core;
+using PepperDash.Essentials.Core.Bridges;
 
 namespace PepperDash.Essentials.Plugin
 {
     /// <summary>
     /// Plugin device Bridge Join Map
     /// </summary>
-    public class ExtronAvMatrixJoinMap : JoinMapBaseAdvanced
+    public class ExtronAvMatrixJoinMap : DmChassisControllerJoinMap
     {
         #region Digital
 
         // TODO [ ] Add digital joins below plugin being developed
-
+        /*
         [JoinName("IsOnline")]
         public JoinDataComplete IsOnline = new JoinDataComplete(
             new JoinData
             {
-                JoinNumber = 1,
+                JoinNumber = 11,
                 JoinSpan = 1
             },
             new JoinMetadata
@@ -24,6 +25,7 @@ namespace PepperDash.Essentials.Plugin
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Digital
             });
+        */
 
         [JoinName("Connect")]
         public JoinDataComplete Connect = new JoinDataComplete(
@@ -34,7 +36,7 @@ namespace PepperDash.Essentials.Plugin
             },
             new JoinMetadata
             {
-                Description = "Connect (Held)/Disconnect (Release) & corresponding feedback",
+                Description = "Device Comms connect",
                 JoinCapabilities = eJoinCapabilities.ToFromSIMPL,
                 JoinType = eJoinType.Digital
             });
@@ -45,17 +47,16 @@ namespace PepperDash.Essentials.Plugin
         #region Analog
 
         // TODO [ ] Add analog joins below plugin being developed
-
         [JoinName("Status")]
         public JoinDataComplete Status = new JoinDataComplete(
             new JoinData
             {
-                JoinNumber = 1,
+                JoinNumber = 2,
                 JoinSpan = 1
             },
             new JoinMetadata
             {
-                Description = "Socket Status",
+                Description = "Device Comms status",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog
             });
@@ -66,8 +67,8 @@ namespace PepperDash.Essentials.Plugin
         #region Serial
 
         // TODO [ ] Add serial joins below plugin being developed
-
-        public JoinDataComplete DeviceName = new JoinDataComplete(
+        /*
+        public JoinDataComplete Name = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 1,
@@ -79,7 +80,7 @@ namespace PepperDash.Essentials.Plugin
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Serial
             });
-
+        */
         #endregion
 
         /// <summary>

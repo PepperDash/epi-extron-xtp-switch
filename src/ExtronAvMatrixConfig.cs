@@ -25,13 +25,13 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// Serializes the input names dictionary
         /// </summary>
         [JsonProperty("inputNames")]
-        public Dictionary<int, string> InputNames { get; set; } = new Dictionary<int, string>();
+        public Dictionary<uint, string> InputNames { get; set; } = new Dictionary<uint, string>();
 
         /// <summary>
         /// Serializes the output names dictionary
         /// </summary>
         [JsonProperty("outputNames")]
-        public Dictionary<int, string> OutputNames { get; set; } = new Dictionary<int, string>();
+        public Dictionary<uint, string> OutputNames { get; set; } = new Dictionary<uint, string>();
 
         [JsonProperty("noRouteText")]
         public string NoRouteText { get; set; } = "Clear";
