@@ -14,6 +14,7 @@ using PepperDash.Essentials.Plugin.IOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Crestron.SimplSharpPro.DM.Audio;
 
 namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 {
@@ -195,16 +196,6 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             CommunicationMonitor.Start();
         }
 
-        private string GetInputPortSelector(int slotNum)
-        {
-            return $"input{slotNum}";
-        }
-
-        private string GetOutputPortSelector(int slotNum)
-        {
-            return $"output{slotNum}";
-        }
-
         private void SetupSlots()
         {
             InputNames = config.InputNames;
@@ -250,7 +241,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupClearInputSlot(uint slotNum)
         {
-            var key = GetInputPortSelector((int)slotNum);
+            var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new ClearInput($"{key}", $"{name}", (int)slotNum);
 
@@ -273,7 +264,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         private void SetupInputSlot(uint slotNum)
         {
-            var key = GetInputPortSelector((int)slotNum);
+            var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new InputSlot($"{key}", $"{name}", (int)slotNum);
 
@@ -302,7 +293,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             if(slotNum == 0) return;
 
-            var key = GetOutputPortSelector((int)slotNum);
+            var key = $"output{slotNum}";
             var name = OutputNames.ContainsKey(slotNum) ? OutputNames[slotNum] : $"Output {slotNum}";
             var slot = new OutputSlot($"output{slotNum}", $"{name}", (int)slotNum);
 
@@ -378,8 +369,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             if (switchMatch.Success)
             {
-                var outputNumber = int.Parse(switchMatch.Groups[1].Value);
-                var inputNumber = int.Parse(switchMatch.Groups[2].Value);
+                var outputNumber = uint.Parse(switchMatch.Groups[1].Value);
+                var inputNumber = uint.Parse(switchMatch.Groups[2].Value);
                 var signalType = switchMatch.Groups[3].Value;
 
                 this.LogDebug($"ProcessFeedbackMessage: Switch response {signalType} Input-{inputNumber} to Output-{outputNumber}");
@@ -408,7 +399,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                             break;
                     }
 
-                    UpdateCurrentRoutes(GetInputPortSelector(inputNumber), GetOutputPortSelector(outputNumber));
+                    UpdateCurrentRoutes(inputNumber, outputNumber);
 
                 }
                 else if(outputSlot == null)
@@ -791,29 +782,26 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 this.LogVerbose($"ExecuteSwitch: Making {signalType.ToString().ToLower()} route from input {inputSelector} to output {outputSelector}");
 
                 var input = Convert.ToUInt16(inputSelector);
-                var output = Convert.ToUInt16(outputSelector);
-
-                var inputSlot = GetInputPortSelector(input);
-                var outputSlot = GetOutputPortSelector(output);
+                var output = Convert.ToUInt16(outputSelector);               
 
                 // route a/v
                 if (signalType.HasFlag(eRoutingSignalType.AudioVideo))
                 {
                     SetAvRoute(input, output);
-                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                    UpdateCurrentRoutes(input, output);
                     return;
                 }
                 // route video
                 if (signalType.HasFlag(eRoutingSignalType.Video))
                 {
                     SetVideoRoute(input, output);
-                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                    UpdateCurrentRoutes(input, output);
                 }
                 // route audio
                 if (signalType.HasFlag(eRoutingSignalType.Audio))
                 {
                     SetAudioRoute(input, output);
-                    UpdateCurrentRoutes(inputSlot, outputSlot);
+                    UpdateCurrentRoutes(input, output);
                 }
             }
             catch(Exception ex)
@@ -830,10 +818,10 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// </summary>
         /// <param name="inputSelector"></param>
         /// <param name="outputSelector"></param>
-        private void UpdateCurrentRoutes(string inputSelector, string outputSelector)
+        private void UpdateCurrentRoutes(uint inputSelector, uint outputSelector)
         {
             RouteSwitchDescriptor descriptor;
-
+            
             descriptor = GetRouteDescriptorByOutputPort(outputSelector);
             this.LogDebug("UpdateCurrentRoutes: Found existing descriptor: {0}", descriptor != null ? "Yes" : "No");
 
@@ -868,15 +856,15 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        private RouteSwitchDescriptor GetRouteDescriptorByOutputPort(string selector)
+        private RouteSwitchDescriptor GetRouteDescriptorByOutputPort(uint selector)
         {
             this.LogDebug("GetRouteDescriptorByOutputPort: Looking for route descriptor with output port selector {0}", selector);
             return CurrentRoutes.FirstOrDefault(rd =>
             {
                 this.LogDebug("GetRouteDescriptorByOutputPort: Checking descriptor with output port selector {0}", rd.OutputPort.Selector);
-                if (rd.OutputPort.Selector is not string opSelector)
+                if (rd.OutputPort.Selector is not uint opSelector)
                 {
-                    this.LogDebug("GetRouteDescriptorByOutputPort: Output port selector is not a string");
+                    this.LogDebug("GetRouteDescriptorByOutputPort: Output port selector is not a uint");
                     return false;
                 }
 
@@ -890,16 +878,16 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        private RoutingInputPort GetRoutingInputPortForSelector(string selector)
+        private RoutingInputPort GetRoutingInputPortForSelector(uint selector)
         {
             this.LogDebug("GetRoutingInputPortForSelector: Looking for input port with selector {0}", selector);
 
             return InputPorts.FirstOrDefault(ip =>
             {
                 this.LogDebug("GetRoutingInputPortForSelector: Checking input port with selector {0}", ip.Selector);
-                if (ip.Selector is not string ipSelector)
+                if (ip.Selector is not uint ipSelector)
                 {
-                    this.LogDebug("GetRoutingInputPortForSelector: Input port selector is not a string");
+                    this.LogDebug("GetRoutingInputPortForSelector: Input port selector is not a uint");
                     return false;
                 }
 
@@ -914,12 +902,12 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        private RoutingOutputPort GetRoutingOutputPortForSelector(string selector)
+        private RoutingOutputPort GetRoutingOutputPortForSelector(uint selector)
         {
 
             return OutputPorts.FirstOrDefault(op =>
             {
-                if (op.Selector is not string opSelector)
+                if (op.Selector is not uint opSelector)
                 {
                     return false;
                 }
