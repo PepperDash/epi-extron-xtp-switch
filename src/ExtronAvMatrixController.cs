@@ -195,6 +195,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             }
 
             CommunicationMonitor.Start();
+
+            PollRoutes();
         }
 
         private void SetupSlots()
@@ -314,6 +316,8 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             // Set verbose mode
             SendText("\x1B3CV");
+
+            PollRoutes();
         }
 
         private void Handle_LineRecieved(object sender, GenericCommMethodReceiveTextArgs args)
