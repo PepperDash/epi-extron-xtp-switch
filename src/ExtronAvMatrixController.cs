@@ -1,6 +1,9 @@
 ﻿// For Basic SIMPL# Classes
 // For Basic SIMPL#Pro classes
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Crestron.SimplSharpPro.CrestronThread;
 using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
@@ -12,9 +15,6 @@ using PepperDash.Essentials.Core.Queues;
 using PepperDash.Essentials.Core.Routing;
 using PepperDash.Essentials.Plugin.Errors;
 using PepperDash.Essentials.Plugin.IOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static Crestron.SimplSharpPro.DM.Audio;
 
 namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
@@ -244,7 +244,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
-            var slot = new ClearInput($"{key}", $"{name}", (int)slotNum);
+            var slot = new ClearInput(key, name, (int)slotNum);
 
             InputSlots.Add(key, slot);
 
@@ -267,7 +267,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         {
             var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
-            var slot = new InputSlot($"{key}", $"{name}", (int)slotNum);
+            var slot = new InputSlot(key, name, (int)slotNum);
 
             InputSlots.Add(key, slot);
 
@@ -296,7 +296,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             var key = $"output{slotNum}";
             var name = OutputNames.ContainsKey(slotNum) ? OutputNames[slotNum] : $"Output {slotNum}";
-            var slot = new OutputSlot($"outputNum{slotNum}", $"{name}", (int)slotNum);
+            var slot = new OutputSlot(key, name, (int)slotNum);
 
             OutputSlots.Add(key, slot);
 
@@ -383,7 +383,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                         case "all":
                             //(outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.AudioVideo, inputSlot);
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
-                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot); 
+                            (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Audio, inputSlot);
                             break;
                         case "vid":
                             (outputSlot as OutputSlot)?.SetInputRoute(eRoutingSignalType.Video, inputSlot);
@@ -454,7 +454,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                     }
 
                     inputSlot.VideoSyncDetected = hasSync;
-                    
+
                     this.LogDebug("ParseSyncStatus: Input {0} sync status is {1}", inputNumber, hasSync);
                 }
             }
@@ -505,7 +505,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
                 // Update DeviceInfo with parsed firmware information
                 UpdateDeviceInfoWithFirmware(fullFirmwareVersion, modelNumber);
 
-                this.LogInformation("ParseFirmwareVersion: Device firmware version to {0}", fullFirmwareVersion);                
+                this.LogInformation("ParseFirmwareVersion: Device firmware version to {0}", fullFirmwareVersion);
             }
         }
 
