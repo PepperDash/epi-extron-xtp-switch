@@ -207,7 +207,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             inputCount = (uint)(InputNames.Count >= 0 ? InputNames.Count : 8);
             outputCount = (uint)(OutputNames.Count > 0 ? OutputNames.Count : 8);
 
-            SetupClearInputSlot(0);
+            SetupInputSlot(0);
 
             for (uint i = 1; i <= inputCount; i++)
             {
@@ -240,34 +240,17 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             }
         }
 
-        private void SetupClearInputSlot(uint slotNum)
-        {
-            var key = $"input{slotNum}";
-            var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
-            var slot = new ClearInput(key, name, (int)slotNum);
-
-            InputSlots.Add(key, slot);
-
-            InputPorts.Add(
-              new RoutingInputPort(
-                key,
-                eRoutingSignalType.AudioVideo,
-                eRoutingPortConnectionType.Hdmi,
-                slotNum,
-                this,
-                true)
-              {
-                  FeedbackMatchObject = key,
-              });
-
-            InputNameFeedbacks[slotNum] = new StringFeedback($"inputNameFeedback-{slot.Key}", () => slot.Name);
-        }
-
         private void SetupInputSlot(uint slotNum)
         {
             var key = $"input{slotNum}";
             var name = InputNames.ContainsKey(slotNum) ? InputNames[slotNum] : $"Input {slotNum}";
             var slot = new InputSlot(key, name, (int)slotNum);
+
+            if (slotNum == 0)
+            {
+                // set static values
+                slot.VideoSyncDetected = true;
+            }
 
             InputSlots.Add(key, slot);
 
