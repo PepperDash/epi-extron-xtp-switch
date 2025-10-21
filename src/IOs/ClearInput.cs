@@ -1,6 +1,6 @@
-﻿using PepperDash.Essentials.Core;
+﻿using System;
+using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Routing;
-using System;
 
 namespace PepperDash.Essentials.Plugin.IOs
 {
@@ -16,9 +16,9 @@ namespace PepperDash.Essentials.Plugin.IOs
 
         public string Name { get; private set; }
 
-        public BoolFeedback IsOnline => new BoolFeedback("IsOnline", () => false);
+        public BoolFeedback IsOnline { get; private set; }
 
-        public bool VideoSyncDetected => false;
+        public bool VideoSyncDetected => true;
 
         public string Key => $"{key}";
 
@@ -30,6 +30,8 @@ namespace PepperDash.Essentials.Plugin.IOs
         {
             this.key = key;
             Name = name;
+            IsOnline = new BoolFeedback("IsOnline", () => true);
+            IsOnline.FireUpdate();
             SlotNumber = slotNum;
         }
     }

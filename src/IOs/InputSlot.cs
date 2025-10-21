@@ -1,7 +1,7 @@
-﻿using PepperDash.Core.Logging;
+﻿using System;
+using PepperDash.Core.Logging;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Routing;
-using System;
 
 namespace PepperDash.Essentials.Plugin.IOs
 {
@@ -49,6 +49,7 @@ namespace PepperDash.Essentials.Plugin.IOs
             this.key = key;
             Name = name;
             IsOnline = new BoolFeedback("IsOnline", () => true); // Placeholder for actual online status since the input doesn't have it's own status independent of the chasses
+            IsOnline.FireUpdate();
             SlotNumber = slotNum;
         }
     }
