@@ -26,6 +26,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
     {
         private const string commsDelimiter = "\r";
         private const string gatherDelimiter = "\n";
+        private const string RgbSwitch = "&";
         private const string VideoSwitch = "%";
         private const string AudioSwitch = "$";
         private const string AllSwitch = "!";
@@ -524,10 +525,10 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             Thread.Sleep(500);
 
             // part number request
-            //SendText("N");
+            SendText("N");
 
             // firmware version request (verbose)
-            SendText("0Q");
+            SendText("Q");
 
             Thread.Sleep(500);
 
@@ -536,16 +537,13 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
         public void PollRoutes()
         {
-            // view all video ties
-            SendText("\x1B0*1*1VC");
-            // view all audio ties
-            SendText("\x1B0*1*2VC");
-
             // query each outputNum for video and audio
             for (int i = 1; i < outputCount; i++)
             {
                 SendText($"{i}{VideoSwitch}");
+                Thread.Sleep(500);
                 SendText($"{i}{AudioSwitch}");
+                Thread.Sleep(500);
             }
         }
 
