@@ -197,6 +197,9 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             CommunicationMonitor.Start();
 
+            // Set verbose mode
+            SendText("\x1B3CV");
+
             PollRoutes();
         }
 
