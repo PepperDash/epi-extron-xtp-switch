@@ -309,7 +309,6 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             OutputAudioRouteNameFeedbacks[slotNum] = new StringFeedback($"outputAudioRouteNameFeedback-{slot.Key}", () => slot.CurrentRoutes[eRoutingSignalType.Audio]?.Name ?? config.NoRouteText);
         }
 
-
         private void Socket_ConnectionChange(object sender, GenericSocketStatusChageEventArgs args)
         {
             ConnectFeedback?.FireUpdate();
