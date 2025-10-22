@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Crestron.SimplSharpPro.CrestronThread;
 using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
@@ -519,33 +520,32 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         /// <remarks>
         /// Poll method is used by the communication monitor.  Update the poll method as needed for the plugin being developed
         /// </remarks>
-        public void Poll()
+        public async void Poll()
         {
             // information request
             SendText("I");
-
-            Thread.Sleep(500);
+            await Task.Delay(500);
 
             // part number request
             SendText("N");
+            await Task.Delay(500);
 
             // firmware version request (verbose)
             SendText("Q");
-
-            Thread.Sleep(500);
+            await Task.Delay(500);
 
             PollSync();
         }
 
-        public void PollRoutes()
+        public async void PollRoutes()
         {
             // query each outputNum for video and audio
             for (int i = 1; i < outputCount; i++)
             {
                 SendText($"{i}{VideoSwitch}");
-                Thread.Sleep(500);
+                await Task.Delay(200);
                 SendText($"{i}{AudioSwitch}");
-                Thread.Sleep(500);
+                await Task.Delay(200);
             }
         }
 
