@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<ProjectType>ProgramLibrary</ProjectType>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <RootNamespace>PepperDash.Essentials.Plugin</RootNamespace>
+		<Deterministic>false</Deterministic>
+		<AssemblyTitle>epi-extron-xtp-switch.4Series.dll</AssemblyTitle>
+		<Company>PepperDash Technology</Company>
+		<Description>This software is developed to control an Extron AV Matrix Switcher.</Description>
+		<Copyright>Copyright 2025</Copyright>
+		<Version>1.0.0-local</Version>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<InformationalVersion>$(Version)</InformationalVersion>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<Authors>PepperDash Technology</Authors>
+		<PackageId>Pepperdash.Essentials.Plugins.Extron.Xtp.Switch</PackageId>
+		<PackageProjectUrl>https://github.com/PepperDash-Engineering/epi-extron-xtp-switch.git</PackageProjectUrl>
+		<PackageTags>crestron 4series essentials extron av matrix switcher</PackageTags>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants);SERIES4</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Properties\**" />	
+		<EmbeddedResource Remove="Properties\**" />
+		<None Remove="Properties\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <None Remove="epi-make-model.projectinfo" />
+  </ItemGroup>
+
+  <ItemGroup>
+ 	<PackageReference Include="PepperDashEssentials" Version="2.12.4">
+  		<ExcludeAssets>runtime</ExcludeAssets>
+ 	</PackageReference>
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <None Remove="..\output\epi-extron-xtp-switch.1.0.0-local.cplz" />
+  </ItemGroup>
+</Project>
