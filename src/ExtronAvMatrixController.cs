@@ -175,7 +175,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
               Poll);
 
             commsGather = new CommunicationGather(this.comms, gatherDelimiter);
-            commsGather.LineReceived += Handle_LineRecieved;
+            commsGather.LineReceived += Handle_LineReceived;
 
             CurrentRoutes = new List<RouteSwitchDescriptor>();
 
@@ -324,7 +324,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
             PollRoutes();
         }
 
-        private void Handle_LineRecieved(object sender, GenericCommMethodReceiveTextArgs args)
+        private void Handle_LineReceived(object sender, GenericCommMethodReceiveTextArgs args)
         {
             // Enqueues the message to be processed in a dedicated thread, but the specified method
             receiveQueue.Enqueue(new ProcessStringMessage(args.Text, ProcessFeedbackMessage));

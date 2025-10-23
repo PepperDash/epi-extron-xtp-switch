@@ -112,7 +112,7 @@ namespace PepperDash.Essentials.Plugin.Errors
         private static readonly Dictionary<ExtronSisErrorCode, string> ErrorMessages = new Dictionary<ExtronSisErrorCode, string>
         {
             { ExtronSisErrorCode.E01, "Invalid input number" },
-            { ExtronSisErrorCode.E10, "Invlaid command" },
+            { ExtronSisErrorCode.E10, "Invalid command" },
             { ExtronSisErrorCode.E11, "Invalid preset number" },
             { ExtronSisErrorCode.E12, "Invalid output number" },
             { ExtronSisErrorCode.E13, "Invalid value" },

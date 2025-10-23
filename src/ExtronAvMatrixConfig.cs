@@ -37,7 +37,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         public string NoRouteText { get; set; } = "Clear";
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         public ExtronAvMatrixConfig()
         {
