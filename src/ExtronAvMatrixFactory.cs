@@ -21,7 +21,7 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
 
             // In the constructor we initialize the list with the typenames that will build an instance of this device
             // TODO [ ] Update the TypeNames for the plugin being developed
-            TypeNames = new List<string>() { "extronSis", "extronXtp", "extronDxp" };
+            TypeNames = new List<string>() { "extronSis", "extronXtp", "extronDxp", "extronDxp88", "extronDxp1616" };
         }
 
         /// <summary>
@@ -52,4 +52,5 @@ namespace PepperDash.Essentials.Plugin.ExtronAvMatrix
         }
     }
 }
+
 
